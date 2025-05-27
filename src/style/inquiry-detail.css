@@ -1,0 +1,243 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+main.board-container {
+    max-width: 900px;
+    margin: 80px auto 40px;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 11rem;
+    margin-bottom: 7rem;
+}
+
+.board-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.board-title {
+    font-size: 2rem;
+    color: #333;
+    border-bottom: 2px solid #7851A9;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+}
+
+.inquiry-detail {
+    margin-top: 2rem;
+}
+
+.inquiry-header {
+    margin-bottom: 1rem;
+}
+
+.inquiry-title {
+    font-size: 1.5rem;
+    color: #222;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+.inquiry-meta {
+    font-size: 0.95rem;
+    color: #666;
+    display: flex;
+    gap: 1rem;
+}
+
+.inquiry-content {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 1rem;
+    background-color: #fafafa;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    min-height: 180px;
+    height: auto;
+    margin-bottom: 3rem;
+}
+
+.inquiry-actions {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+.inquiry-edit-btn,
+.inquiry-delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.inquiry-edit-btn {
+    background-color: #7851A9;
+    margin-top: 1rem;
+}
+
+.inquiry-edit-btn:hover {
+    background-color: #68439a;
+}
+
+.inquiry-delete-btn {
+    background-color: #dc3545;
+    margin-top: 1rem;
+    height: 40px;
+}
+
+.inquiry-delete-btn:hover {
+    background-color: #c82333;
+}
+
+.answers-section {
+    margin-top: 6rem;
+    border-top: 2px solid #eee;
+    padding-top: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.answers-section h3 {
+    font-size: 1.25rem;
+    color: #7851A9;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.answer-item {
+    background-color: #f5f5ff;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.answer-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.answer-content {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 1rem;
+    background-color: #f5f5ff;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    min-height: 180px;
+    height: auto;
+}
+
+.answer-content p {
+    margin: 0;
+}
+
+.board-actions {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.list-btn {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    background-color: #7851A9;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.list-btn:hover {
+    background-color: #68439a;
+}
+
+.inquiry-files {
+    margin-top: 1.5rem;
+}
+
+.inquiry-files h3 {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.inquiry-files ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.inquiry-files li {
+    margin-bottom: 0.5rem;
+}
+
+.inquiry-files a {
+    display: inline-block;
+    background-color: #f3f3f3;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.inquiry-files a:hover {
+    background-color: #e0e0e0;
+}
+
+.admin-answer-form {
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+    border-top: 1px solid #ddd;
+    padding-top: 1.5rem;
+}
+
+.admin-answer-form h2{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: #7851A9;
+}
+
+.admin-answer-form textarea{
+    margin-bottom: 1rem;
+}
+
+.admin-actions {
+    margin-top: 3rem;
+    text-align: right;
+}
+
+.inquiry-section-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.inquiry-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.inquiry-back-btn:hover {
+    color: #7851A9;
+}

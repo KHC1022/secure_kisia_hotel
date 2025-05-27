@@ -1,0 +1,729 @@
+/* 관리자 페이지 전체 컨테이너 */
+.admin-container {
+    width: 90%;            
+    max-width: 1600px;        
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    min-height: 100%;
+    box-sizing: border-box;
+    margin-bottom: 5rem;
+}
+
+
+
+/* 관리자 페이지 전체 배경 */
+.admin-body {
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* 관리자 메뉴 제목 */
+.admin-title {
+    margin: 2rem 0;
+    color: #1a365d;
+    font-size: 2.2rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 1rem;
+    text-align: center;
+    margin-top: 9rem;
+}
+
+.admin-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(to right, #4299e1, #63b3ed);
+    border-radius: 2px;
+}
+
+/* 관리자 메뉴 */
+.admin-menu {
+    display: flex;
+    gap: 1rem;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(44, 82, 130, 0.1);
+    margin-bottom: 2rem;
+    width: auto;
+    min-width: fit-content;
+    position: sticky;
+    top: 80px;
+    z-index: 100;
+    margin: 0 auto;
+}
+
+.admin-menu ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.admin-menu li {
+    flex: 1;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #2c5282;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.admin-menu li i {
+    font-size: 1.1rem;
+}
+
+.admin-menu li:hover {
+    background-color: #ebf8ff;
+    color: #2c5282;
+}
+
+.admin-menu li.active {
+    background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
+    color: white;
+}
+
+/* 섹션 헤더 */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10rem;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(44, 82, 130, 0.1);
+    width: auto;
+    min-width: fit-content;
+    margin: 0 auto;
+    margin-top: 5rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: #2c5282;
+    margin: 0;
+}
+
+/* 검색 폼 컨테이너 */
+.search-form-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: auto;
+    min-width: fit-content;
+}
+
+/* 섹션 액션 */
+.section-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* 검색 박스 */
+.admin-search-box {
+    display: flex;
+    gap: 0.5rem;
+    background: #ebf8ff;
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: auto;
+    min-width: 300px;
+    margin: 0 auto;
+}
+
+.admin-search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+    color: #2c5282;
+}
+
+.admin-search-box input:focus {
+    outline: none;
+}
+
+.admin-search-box button {
+    background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.admin-search-box button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 82, 130, 0.2);
+}
+
+/* 테이블 컨테이너 */
+.table-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(44, 82, 130, 0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    width: auto;
+    min-width: fit-content;
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+
+/* 테이블 스타일 */
+.admin-table {
+    width: 100%;
+    min-width: 1200px; 
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+.admin-table th {
+    background: #ebf8ff;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: #2c5282;
+    font-size: 0.95rem;
+    border-bottom: 2px solid #bee3f8;
+}
+
+
+.table-container {
+    overflow-x: auto;
+}
+
+#coupons .admin-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.admin-table tr:hover {
+    background-color: #ebf8ff;
+}
+
+/* 액션 버튼 */
+.action-btn {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn.edit {
+    color: #2c5282;
+}
+
+.action-btn.delete {
+    color: #c53030;
+}
+
+.action-btn.view {
+    color: #2f855a;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.action-btn.edit:hover {
+    color: #4299e1;
+}
+
+.action-btn.delete:hover {
+    color: #e53e3e;
+}
+
+.action-btn.view:hover {
+    color: #48bb78;
+}
+
+/* 추가 버튼 */
+.add-btn {
+    background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 82, 130, 0.2);
+}
+
+/* 상태 표시 */
+.status-complete {
+    background: #c6f6d5;
+    color: #2f855a;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 90px;
+}
+
+.status-pending {
+    background: #feebc8;
+    color: #c05621;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* 관리자 이름 스타일 */
+.admin-name {
+    color: #2c3e50;
+    margin-right: 1rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .admin-menu ul {
+        flex-wrap: wrap;
+    }
+    
+    .admin-menu li {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .section-header,
+    .table-container,
+    .search-form-container {
+        width: 90%;
+        min-width: auto;
+    }
+
+    .admin-no-results {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 0 1rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        width: 95%;
+    }
+    
+    .search-form-container {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .section-actions {
+        width: 100%;
+    }
+    
+    .admin-search-box {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .table-container {
+        width: 95%;
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        min-width: 800px;
+    }
+    
+    .admin-menu ul {
+        flex-direction: column;
+    }
+    
+    .admin-menu li {
+        width: 100%;
+    }
+
+    .admin-no-results {
+        width: 95%;
+        padding: 40px 1rem;
+    }
+}
+
+/* 호텔 추가 폼 스타일 */
+.admin-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.admin-form .admin-form-group {
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+}
+
+.admin-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.admin-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="email"],
+.admin-form input[type="number"],
+.admin-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.admin-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.admin-checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+}
+
+.admin-checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.image-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.room-type {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.remove-room {
+    padding: 0.5rem;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remove-room:hover {
+    background-color: #cc0000;
+}
+
+.add-room-btn {
+    padding: 0.5rem 1rem;
+    background-color: #7851A9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.add-room-btn:hover {
+    background-color: #6a4498;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancel-btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #f8f9fa;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.cancel-btn:hover {
+    background-color: #e9ecef;
+}
+
+.submit-btn {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 82, 130, 0.2);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    color: #2c5282;
+}
+
+.file-input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.file-input-box {
+    border: 2px dashed #2c5282;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    background-color: #ebf8ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 4rem;
+}
+
+.file-input-box:hover {
+    background-color: #bee3f8;
+    border-color: #4299e1;
+}
+
+.file-input-box i {
+    font-size: 2rem;
+    color: #2c5282;
+    margin-bottom: 1rem;
+}
+
+.file-input-box p {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.file-input-box input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.admin-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+}
+
+.admin-pagination a {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.admin-pagination a.active {
+    background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
+    color: white;
+    border: none;
+}
+
+.admin-pagination a.arrow {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+}
+
+.admin-pagination a:hover {
+    background-color: #ebf8ff;
+    color: #2c5282;
+}
+
+/* 결과 없음 메시지 */
+.admin-no-results {
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(44, 82, 130, 0.1);
+    width: auto;
+    min-width: fit-content;
+    margin: 0 auto;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    padding: 50px 2rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.admin-no-results::before {
+    content: '\f002';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    display: block;
+    font-size: 2.5rem;
+    color: #999;
+    margin-bottom: 15px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .admin-no-results {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-no-results {
+        width: 95%;
+        padding: 40px 1rem;
+    }
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: center !important; 
+    vertical-align: middle !important;
+    padding: 0.8rem 0.5rem !important;
+}
+
+
+.admin-table i {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ✅ 모든 action 버튼 크기 통일 */
+.action-btn {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+}
+.admin-table td form {
+    display: inline-block;
+    margin: 0;
+}
+/* VIP 라벨 스타일 개선 */
+.admin-table .grade-label {
+    background-color: #edf2f7;
+    border: 1px solid #cbd5e0;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* VIP 전용 스타일 */
+.admin-table .grade-label.vip {
+    background-color: #fff8dc;
+    border: 1px solid #f6e05e;
+    color: #d69e2e;
+    font-weight: 700;
+}
+
+.admin-table .grade-label.vip i {
+    color: #d69e2e;
+    font-size: 14px;
+}
+
+.admin-table td > form {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px !important;
+}
+/* ✅ 관리자 전용 스타일 */
+.admin-table .grade-label.admin {
+    background-color: #e6fffa;
+    border: 1px solid #38b2ac;
+    color: #2c7a7b;
+    font-weight: 700;
+}
+
+.admin-table .grade-label.admin i {
+    color: #2c7a7b;
+    font-size: 14px;
+}

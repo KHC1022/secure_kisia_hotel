@@ -1,0 +1,495 @@
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 헤더 스타일 */
+.style-header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    height: 60px;
+}
+
+.style-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    height: 60px;
+}
+
+.style-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    position: absolute;
+    left: 5%;
+}
+
+.style-logo span {
+    color: #7851A9;
+    font-weight: 800;
+}
+
+.style-nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0 auto;
+}
+
+.style-nav-links li {
+    white-space: nowrap;
+}
+
+.style-nav-links a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.style-nav-links a:hover {
+    color: #7851A9;
+}
+
+.style-username {
+    font-weight: 800;
+    color: #7851A9;
+}
+
+.style-auth-buttons {
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    right: 5%;
+}
+
+/* 히어로 섹션 */
+.style-hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.style-search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    margin: 0 auto;
+}
+
+.style-search-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #fff;                
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+    position: relative;
+    z-index: 10;
+}
+.style-search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9); 
+    padding: 1rem 2rem;
+    border-radius: 10px;                     
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+}
+
+.style-search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.style-search-input {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 6px 10px;
+    gap: 5px;
+    min-width: 160px;
+    height: 40px;
+}
+
+
+.style-search-input i {
+    font-size: 14px;
+    color: #999;
+}
+
+.style-search-input input {
+    width: 100px;                      
+    border: none;
+    outline: none;
+}
+
+
+.style-search-input input[type="date"] {
+    color: #333;
+}
+
+.style-search-btn {
+    background: linear-gradient(to right, #7851A9, #7851A9);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    min-width: 80px;                 
+}
+
+
+.style-search-btn:hover {
+    background: linear-gradient(to right, #6039b1, #4e2c99);
+}
+
+
+/* 추천 호텔 섹션 */
+.style-featured-hotels {
+    padding: 4rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    margin-top: 3rem;
+    margin-bottom: 4rem;
+}
+
+.style-featured-hotels h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+}
+
+.style-hotel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.style-hotel-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.style-hotel-card:hover {
+    transform: translateY(-5px);
+}
+
+.style-hotel-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.style-hotel-info {
+    padding: 1.5rem;
+}
+
+.style-hotel-info h3 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.style-location {
+    color: #7f8c8d;
+    margin-top: 0.8rem;
+}
+
+.style-rating {
+    color: #f1c40f;
+    margin-bottom: 0.1rem;
+}
+
+.style-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.style-book-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #7851A9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.style-book-btn:hover {
+    background-color: #5B3B8A;
+}
+
+/* 혜택 섹션 */
+.style-benefits {
+    background-color: #f8f9fa;
+    padding: 4rem 5%;
+    margin-top: 3rem;
+}
+
+.style-benefits h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+
+.style-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.style-benefit-card {
+    text-align: left;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block;
+    height: 100%;
+}
+
+.style-benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.style-benefit-card i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.style-benefit-card:hover i {
+    color: #2980b9;
+}
+
+.style-benefit-card h3 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.style-benefit-card:hover h3 {
+    color: #3498db;
+}
+
+.style-benefit-card p {
+    color: #7f8c8d;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.style-event-date {
+    display: block;
+    color: #3498db;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.style-benefit-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #3498db;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.style-benefit-link i {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.style-benefit-card:hover .style-benefit-link i {
+    transform: translateX(5px);
+}
+
+/* 푸터 스타일 */
+.style-footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 4rem 5% 2rem;
+}
+
+.style-footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.style-footer-section {
+    text-align: center;
+}
+
+.style-footer-section h3 {
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.style-footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.style-footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.style-footer-section a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.style-footer-section a:hover {
+    color: #7851A9;
+}
+
+.style-footer-section p {
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.style-footer-section i {
+    margin-right: 0.5rem;
+    color: white;
+}
+
+.style-footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .style-nav {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .style-logo {
+        position: static;
+        margin-bottom: 1rem;
+    }
+
+    .style-auth-buttons {
+        position: static;
+        margin: 1rem 0 0 0;
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .style-search-container h1 {
+        font-size: 2rem;
+    }
+
+    .style-search-box {
+    max-width: 500px;
+    margin: 0 auto;
+    }
+
+    .style-search-btn {
+        margin-top: 10px;
+    }
+
+    .style-board-container {
+        padding: 1rem;
+    }
+
+    .style-footer-content {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+
+    .style-footer-section {
+        margin-bottom: 2rem;
+    }
+}
+
+.style-board-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.style-detail-btn {
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #7851A9;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.style-detail-btn:hover {
+    background-color: #6a4498;
+} 

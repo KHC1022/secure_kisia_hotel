@@ -1,0 +1,512 @@
+/* Reset CSS */
+.timedeal * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.timedeal-body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #ffffff;
+}
+
+.timedeal ul, 
+.timedeal ol {
+    list-style: none;
+}
+
+.timedeal a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.timedeal img {
+    max-width: 100%;
+    height: auto;
+}
+
+.timedeal-button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* Common CSS */
+.timedeal-header {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.timedeal-header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timedeal-logo img {
+    height: 40px;
+}
+
+.timedeal-navigation {
+    display: flex;
+    align-items: center;
+}
+
+.timedeal-nav-list {
+    display: flex;
+    gap: 2rem;
+}
+
+.timedeal-nav-list a {
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.timedeal-nav-list a:hover {
+    color: #7851A9;
+}
+
+.timedeal-footer {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 3rem 0;
+    margin-top: 4rem;
+}
+
+.timedeal-footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.timedeal-company-info {
+    margin-bottom: 2rem;
+}
+
+.timedeal-company-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.timedeal-company-info p {
+    color: #bdc3c7;
+    margin-bottom: 0.5rem;
+}
+
+.timedeal-footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.timedeal-footer-links a {
+    color: #bdc3c7;
+    transition: color 0.3s;
+}
+
+.timedeal-footer-links a:hover {
+    color: #fff;
+}
+
+/* 이벤트 컨테이너 스타일 */
+.timedeal-container {
+    max-width: 1200px;
+    margin: 8rem auto 2rem;
+    padding: 0 2rem;
+    margin-bottom: 4rem;
+}
+
+.timedeal-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.timedeal-header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.timedeal-period {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.timedeal-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.timedeal-image {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+}
+
+.timedeal-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0));
+    pointer-events: none;
+}
+
+.timedeal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.timedeal-image:hover img {
+    transform: scale(1.02);
+}
+
+.timedeal-details {
+    padding: 3rem;
+}
+
+.timedeal-details h2 {
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.timedeal-details p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* 호텔 딜 스타일 */
+.timedeal-deals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.timedeal-deal-item {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.timedeal-deal-item:hover {
+    transform: translateY(-5px);
+}
+
+.timedeal-hotel-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.timedeal-hotel-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.timedeal-discount-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: #ff4757;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.timedeal-hotel-info {
+    padding: 1.5rem;
+}
+
+.timedeal-hotel-info h4 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.timedeal-hotel-location {
+    color: #666;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.timedeal-price-info {
+    margin-top: 1rem;
+}
+
+.timedeal-original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+.timedeal-hotel-info .timedeal-price-info .timedeal-discount-price {
+    font-size: 1.3rem;
+    color: #ff4757;
+    font-weight: bold;
+}
+
+.timedeal-booking-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background-color: #7851A9;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+}
+
+.timedeal-booking-btn:hover {
+    background-color: #5B3B8A;
+}
+
+.timedeal-section {
+    margin-top: 3rem;
+}
+
+.timedeal-section:last-child {
+    margin-bottom: 3rem;
+}
+
+.timedeal-discount-price {
+    font-size: 1.5rem;
+    color: #ff4757;
+    font-weight: bold;
+}
+
+.timedeal-section h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.timedeal-section ol,
+.timedeal-section ul {
+    padding-left: 1.5rem;
+}
+
+.timedeal-section li {
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.timedeal-notice-list {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 5px;
+}
+
+.timedeal-notice-list li {
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+/* 이벤트 버튼 스타일 */
+.event-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.share-btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #f8f9fa;
+    color: #666;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.share-btn:hover {
+    background-color: #e9ecef;
+}
+
+.share-btn i {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .timedeal-header-content {
+        padding: 1rem;
+    }
+
+    .timedeal-nav-list {
+        gap: 1rem;
+    }
+
+    .timedeal-container {
+        padding: 0 1rem;
+    }
+
+    .timedeal-header h1 {
+        font-size: 2rem;
+    }
+
+    .timedeal-deals {
+        grid-template-columns: 1fr;
+    }
+
+    .timedeal-deal-item {
+        margin-bottom: 1rem;
+    }
+
+    .timedeal-hotel-image {
+        height: 180px;
+    }
+
+    .timedeal-section {
+        padding: 0 1rem;
+    }
+
+    .timedeal-footer-content {
+        padding: 0 1rem;
+    }
+
+    .timedeal-footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .timedeal-image {
+        height: 300px;
+    }
+
+    .timedeal-buttons {
+        flex-direction: column;
+    }
+
+    .timedeal-share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .timedeal-details {
+        padding: 1.5rem;
+    }
+
+    .timedeal-details h2 {
+        font-size: 1.8rem;
+    }
+
+    .timedeal-section h3 {
+        font-size: 1.3rem;
+    }
+}
+
+.timedeal-detail-btn {
+    display: inline-block; 
+    padding: 0.8rem 1.5rem;
+    background-color: #7851A9;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.timedeal-detail-btn:hover {
+    background-color: #5B3B8A;
+}
+
+.spi_copyurl {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 600px;
+}
+
+.spi_copyurl.show {
+    display: block;
+}
+
+.spi_overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.spi_overlay.show {
+    display: block;
+}
+
+._spi_copyurl_txt {
+    display: inline-block;
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f9f9f9;
+    word-break: break-all;
+    color: #2196f3;
+    vertical-align: middle;
+}
+
+._spi_btn_copyurl {
+    display: inline-block;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background: #7851A9;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 40px;
+    vertical-align: middle;
+    line-height: 20px;
+} 

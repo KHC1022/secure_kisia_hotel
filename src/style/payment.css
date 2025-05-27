@@ -1,0 +1,232 @@
+.payment-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    margin-top: 6rem;
+    margin-bottom: 4rem;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.payment-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.booking-summary, .payment-form {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.booking-summary:hover, .payment-form:hover {
+    transform: translateY(-5px);
+}
+
+.booking-summary h2, .payment-form h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f0f2f5;
+    font-weight: 600;
+}
+
+.summary-card {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    border: 1px solid #e9ecef;
+}
+
+.payment-location {
+    color: #6c757d;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.payment-location i {
+    color: #7851A9;
+}
+
+.booking-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem; 
+    margin-bottom: 2rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.detail-item .label {
+    color: #6c757d;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.detail-item .value {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+
+.price-summary {
+    border-top: 2px solid #f0f2f5;
+    padding-top: 2rem;
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    color: #6c757d;
+}
+
+.price-item.total {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.payment-form-group {
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.payment-form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #7851A9;
+    font-weight: 700;
+}
+
+.terms-agreement {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 3rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.terms-agreement input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #7851A9;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+}
+
+.payment-form form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.payment-btn {
+    width: 100%;
+    padding: 1.2rem;
+    background-color: #7851A9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.payment-btn:hover {
+    background-color: #6a4498;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(120, 81, 169, 0.2);
+}
+
+.payment-btn:active {
+    transform: translateY(0);
+}
+
+#toggle-icon {
+    font-size: 14px;
+    color: #aaa;
+    margin-left: 5px;
+}
+
+.coupon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+}
+
+.coupon-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.coupon-list li:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.coupon-list input[type="radio"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.coupon-list strong {
+    font-weight: 600;
+    color: #333;
+}
+
+.coupon-list li span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .payment-container {
+        padding: 1rem;
+        margin-top: 4rem;
+    }
+
+    .payment-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .booking-details {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-summary, .payment-form {
+        padding: 1.5rem;
+    }
+}
