@@ -4,22 +4,19 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../action/login_check.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
-$hotel_id = $_GET['id'] ?? 0;
+$hotel_id = (int)($_GET['id'] ?? 0);
 $checkin = $_GET['checkin'] ?? '';
 $checkout = $_GET['checkout'] ?? '';
-$guests = $_GET['guests'] ?? '';
+$guests = (int)($_GET['guests'] ?? 0);
 $room_type = $_GET['room_type'] ?? '';
-$deluxe_room_id = $_GET['deluxe_room_id'] ?? 0;
-$suite_room_id = $_GET['suite_room_id'] ?? 0;
-$event_busan = $_GET['event_busan'] ?? 0;
-$event_japan = $_GET['event_japan'] ?? 0;
+$deluxe_room_id = (int)($_GET['deluxe_room_id'] ?? 0);
+$suite_room_id = (int)($_GET['suite_room_id'] ?? 0);
+$event_busan = (int)($_GET['event_busan'] ?? 0);
+$event_japan = (int)($_GET['event_japan'] ?? 0);
 
-if ($room_type == 'deluxe') {
-    $room_id = $deluxe_room_id;
-} else {
-    $room_id = $suite_room_id;
-}
+$room_id = $room_type === 'deluxe' ? $deluxe_room_id : $suite_room_id;
 
+// 날짜 유효성 검사
 if ($checkin && $checkout) {
     $checkin_date = new DateTime($checkin);
     $checkout_date = new DateTime($checkout);
@@ -31,54 +28,68 @@ if ($checkin && $checkout) {
 }
 
 // 호텔 정보 불러오기
-$hotel_sql = "SELECT * FROM hotels WHERE hotel_id = $hotel_id";
-$hotel_result = mysqli_query($conn, $hotel_sql);
-$hotel = $hotel_result ? mysqli_fetch_assoc($hotel_result) : null;
-
-// 유저 정보 불러오기
-if ($user_id) {
-    $user_sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-    $user_result = mysqli_query($conn, $user_sql);
-    $users = $user_result ? mysqli_fetch_assoc($user_result) : null;
-} else {
-    $users = null;
+$hotel = null;
+if ($hotel_id > 0) {
+    $hotel_sql = "SELECT * FROM hotels WHERE hotel_id = ?";
+    $stmt = $conn->prepare($hotel_sql);
+    $stmt->bind_param("i", $hotel_id);
+    $stmt->execute();
+    $hotel_result = $stmt->get_result();
+    $hotel = $hotel_result->fetch_assoc();
 }
 
+// 유저 정보 불러오기
+$users = null;
+if ($user_id) {
+    $user_sql = "SELECT * FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($user_sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $user_result = $stmt->get_result();
+    $users = $user_result->fetch_assoc();
+}
+
+// 숙박 일수 계산
 $days = 1;
 if ($checkin && $checkout) {
     $start = new DateTime($checkin);
     $end = new DateTime($checkout);
     $days = $start->diff($end)->days;
-    if ($days <= 0) $days = 1; // 최소 1박
+    if ($days <= 0) $days = 1;
 }
 
 // 객실 요금 계산
-if ($event_busan == 1) {
-    $room_price_sql = "SELECT price FROM rooms WHERE room_id = $room_id";
-    $room_price_result = mysqli_query($conn, $room_price_sql);
-    $room = mysqli_fetch_assoc($room_price_result);
-    $price_per_night = $room['price'] * 0.6;
-} else if ($event_japan == 1) {
-    $room_price_sql = "SELECT price FROM rooms WHERE room_id = $room_id";
-    $room_price_result = mysqli_query($conn, $room_price_sql);
-    $room = mysqli_fetch_assoc($room_price_result);
-    $price_per_night = $room['price'] * 0.8;
-} else {
-    $room_price_sql = "SELECT price FROM rooms WHERE room_id = $room_id";
-    $room_price_result = mysqli_query($conn, $room_price_sql);
-    $room = mysqli_fetch_assoc($room_price_result);
-    $price_per_night = $room['price'] ?? 0;
+$price_per_night = 0;
+if ($room_id > 0) {
+    $room_price_sql = "SELECT price FROM rooms WHERE room_id = ?";
+    $stmt = $conn->prepare($room_price_sql);
+    $stmt->bind_param("i", $room_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $room = $result->fetch_assoc();
+
+    if ($room) {
+        $price_per_night = $room['price'];
+        if ($event_busan) {
+            $price_per_night *= 0.6;
+        } elseif ($event_japan) {
+            $price_per_night *= 0.8;
+        }
+    }
 }
+
 $room_fee = $price_per_night * $days;
-
-// 세금 및 수수료: 객실 요금의 10%
 $tax = round($room_fee * 0.1);
-
-// 총 결제 금액 = 객실 요금 + 세금
 $total_price = $room_fee + $tax;
 
-$pay_sql = "SELECT point FROM users WHERE user_id = '$user_id'";
-$pay_result = mysqli_query($conn, $pay_sql);
-$user = mysqli_fetch_assoc($pay_result);
-
+// 사용자 포인트 확인
+$user = null;
+if ($user_id) {
+    $pay_sql = "SELECT point FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($pay_sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+}
 ?>

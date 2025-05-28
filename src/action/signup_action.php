@@ -1,7 +1,8 @@
 <?php
 include_once __DIR__ . '/../includes/db_connection.php';
+session_start(); // CSRF 토큰 등을 사용할 경우 필요
 
-// POST 방식으로 수신
+// POST 방식으로 수신 및 이스케이프
 $name = trim($_POST['username'] ?? '');
 $id = trim($_POST['real_id'] ?? '');
 $password = $_POST['password'] ?? '';
@@ -17,13 +18,31 @@ if (!$name || !$id || !$password || !$passwordConfirm || !$email || !$phone) {
     exit;
 }
 
-// 비밀번호 확인
+// 아이디 유효성 검사
+if (!preg_match('/^[a-zA-Z0-9]{5,20}$/', $id)) {
+    echo "<script>alert('아이디는 영문 또는 숫자로 5~20자 이내여야 합니다.'); history.back();</script>";
+    exit;
+}
+
+// 전화번호 유효성 검사 (숫자만 10~11자리)
+if (!preg_match('/^[0-9]{10,11}$/', $phone)) {
+    echo "<script>alert('전화번호는 숫자만 입력하며, 10~11자리여야 합니다.'); history.back();</script>";
+    exit;
+}
+
+// 비밀번호 일치 확인
 if ($password !== $passwordConfirm) {
     echo "<script>alert('비밀번호가 일치하지 않습니다.'); history.back();</script>";
     exit;
 }
 
-// 이용약관 동의 확인
+// 비밀번호 보안 조건 검사
+if (strlen($password) < 8 || !preg_match('/[\W_]/', $password)) {
+    echo "<script>alert('비밀번호는 최소 8자 이상이며, 특수문자를 포함해야 합니다.'); history.back();</script>";
+    exit;
+}
+
+// 약관 동의 확인
 if ($terms !== 1) {
     echo "<script>alert('이용약관 및 개인정보처리방침에 동의하셔야 합니다.'); history.back();</script>";
     exit;
