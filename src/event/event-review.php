@@ -58,15 +58,11 @@ if (empty($_SESSION['csrf_token'])) {
 
             <div class="comment-section">
                 <h3>의견 남기기</h3>
-                <?php if ($logged_in): ?>
                 <form id="commentForm" class="comment-form" method="POST" action="../action/event_review_action.php">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                     <textarea id="comment" name="comment" placeholder="KISIA HOTEL에 대한 의견을 자유롭게 작성해주세요." required></textarea>
                     <button type="submit" class="event-submit-btn">등록하기</button>
                 </form>
-                <?php else: ?>
-                    <p style="color: red;">로그인 후 댓글을 작성하실 수 있습니다. <a href="/user/login.php">[로그인]</a></p>
-                <?php endif; ?>
             </div>
 
             <div class="comments-list">

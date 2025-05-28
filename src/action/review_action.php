@@ -51,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
 }
 
 // 리뷰 삭제 처리
-if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['review_id']) && isset($_GET['hotel_id'])) {
-    $review_id = (int)$_GET['review_id'];
-    $hotel_id = (int)$_GET['hotel_id'];
+if (isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['review_id']) && isset($_POST['hotel_id'])) {
+    $review_id = (int)$_POST['review_id'];
+    $hotel_id = (int)$_POST['hotel_id'];
 
     $conn->query("DELETE FROM review_helpful WHERE review_id = $review_id");
     $conn->query("DELETE FROM review_images WHERE review_id = $review_id");
@@ -75,12 +75,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['revie
 
 // 도움이 됨/안됨 처리
 if (
-    isset($_GET['review_id'], $_GET['action'], $_GET['hotel_id']) &&
+    isset($_POST['review_id'], $_POST['action'], $_POST['hotel_id']) &&
     isset($_SESSION['user_id'])
 ) {
-    $review_id = (int)$_GET['review_id'];
-    $action = $_GET['action'];
-    $hotel_id = (int)$_GET['hotel_id'];
+    $review_id = (int)$_POST['review_id'];
+    $action = $_POST['action'];
+    $hotel_id = (int)$_POST['hotel_id'];
     $user_id = (int)$_SESSION['user_id'];
 
     // 중복 확인
