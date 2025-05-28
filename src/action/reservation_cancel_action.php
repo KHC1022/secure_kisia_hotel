@@ -3,8 +3,8 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/mypage_action.php';  // VIP 관련 함수
 
-$reservation_id = (int)($_GET['reservation_id'] ?? 0);
-$room_id = (int)($_GET['room_id'] ?? 0);
+$reservation_id = (int)($_POST['reservation_id'] ?? 0);
+$room_id = (int)($_POST['room_id'] ?? 0);
 $user_id = $_SESSION['user_id'] ?? 0;
 
 if (!$reservation_id || !$room_id || !$user_id) {

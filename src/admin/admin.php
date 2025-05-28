@@ -594,7 +594,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <?php endif; ?>
                                         </td>
                                         <td style="text-align: center;">
-                                            <form method="get" action="../admin/coupon-edit.php">
+                                            <form method="post" action="../admin/coupon-edit.php">
                                                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="coupon_edit" class="action-btn edit" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>

@@ -3,8 +3,16 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../action/login_check.php';
 
-// 요청 방식 확인
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+// 관리자가 아닌 경우 CSRF 토큰 검증
+if (!isset($_SESSION['is_admin'])) {
+  if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+      echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+      exit;
+  }
+}
+
+// POST 요청인지 확인
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo "<script>
             alert('잘못된 요청 방식입니다.');
             history.back();

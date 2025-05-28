@@ -70,6 +70,20 @@ if ($action_type === 'delete') {
             exit;
         }
 
+        $stmt3 = $conn->prepare("SELECT status FROM reservations WHERE reservation_id = ?");    
+        $stmt3->bind_param("i", $id);
+        $stmt3->execute();
+        $result3 = $stmt3->get_result();
+        $row = $result3->fetch_assoc();
+
+        if ($row['status'] === 'cancel') {
+            echo "<script>
+                alert('이미 취소된 예약입니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
+            </script>";
+            exit;
+        }
+
         $room_id = intval($_POST['room_id']);
 
         $stmt = $conn->prepare("UPDATE reservations SET status = 'cancel' WHERE reservation_id = ?");

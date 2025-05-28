@@ -215,6 +215,7 @@ if (!in_array($room_type, ['deluxe', 'suite'])) {
                                         <input type="file" name="review_image" accept="image/*">
                                     </div>
                                     <div class="review-form-actions">
+                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
                                         <button type="submit" name="submit_review" class="submit-review">후기 등록</button>
                                     </div>
                                 </form>
@@ -322,7 +323,7 @@ if (!in_array($room_type, ['deluxe', 'suite'])) {
                 <?php if ($available_rooms > 0) : ?>
                 <div class="booking-widget">
                     <h2>객실 예약</h2>
-                    <form class="booking-form" action="../user/payment.php" method="get">
+                    <form class="booking-form" action="../user/payment.php" method="post">
                         <input type="hidden" name="id" id="id" value="<?= $hotel_id ?>">
                         <div class="booking-form-group">
                             <label for="check-in">체크인</label>

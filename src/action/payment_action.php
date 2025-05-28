@@ -4,15 +4,15 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../action/login_check.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
-$hotel_id = (int)($_GET['id'] ?? 0);
-$checkin = $_GET['checkin'] ?? '';
-$checkout = $_GET['checkout'] ?? '';
-$guests = (int)($_GET['guests'] ?? 0);
-$room_type = $_GET['room_type'] ?? '';
-$deluxe_room_id = (int)($_GET['deluxe_room_id'] ?? 0);
-$suite_room_id = (int)($_GET['suite_room_id'] ?? 0);
-$event_busan = (int)($_GET['event_busan'] ?? 0);
-$event_japan = (int)($_GET['event_japan'] ?? 0);
+$hotel_id = (int)($_POST['id'] ?? 0);
+$checkin = $_POST['checkin'] ?? '';
+$checkout = $_POST['checkout'] ?? '';
+$guests = (int)($_POST['guests'] ?? 0);
+$room_type = $_POST['room_type'] ?? '';
+$deluxe_room_id = (int)($_POST['deluxe_room_id'] ?? 0);
+$suite_room_id = (int)($_POST['suite_room_id'] ?? 0);
+$event_busan = (int)($_POST['event_busan'] ?? 0);
+$event_japan = (int)($_POST['event_japan'] ?? 0);
 
 $room_id = $room_type === 'deluxe' ? $deluxe_room_id : $suite_room_id;
 

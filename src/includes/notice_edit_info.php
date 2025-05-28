@@ -2,7 +2,7 @@
 include_once __DIR__ . '/db_connection.php';
 
 // 공지사항 ID 확인 및 정수 필터링
-if (!isset($_GET['notice_edit']) || !is_numeric($_GET['notice_edit'])) {
+if (!isset($_POST['notice_edit']) || !is_numeric($_POST['notice_edit'])) {
     echo "<script>
             alert('잘못된 접근입니다.');
             window.location.href = '../admin/admin.php?tab=notices';
@@ -10,7 +10,7 @@ if (!isset($_GET['notice_edit']) || !is_numeric($_GET['notice_edit'])) {
     exit;
 }
 
-$notice_id = (int)$_GET['notice_edit'];
+$notice_id = (int)$_POST['notice_edit'];
 
 // 공지사항 정보 가져오기
 $sql = "SELECT n.*, u.username 

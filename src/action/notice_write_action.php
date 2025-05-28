@@ -3,8 +3,16 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../action/login_check.php';
 
-// GET이 아닌 경우 차단
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+// 관리자가 아닌 경우 CSRF 토큰 검증
+if (!isset($_SESSION['is_admin'])) {
+  if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+      echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+      exit;
+  }
+}
+
+// POST 요청인지 확인
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo "<script>
             alert('잘못된 요청입니다.');
             history.back();
@@ -13,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 // 입력값 필터링 및 유효성 검사
-$title = trim($_GET['title'] ?? '');
-$content = trim($_GET['content'] ?? '');
-$is_released = isset($_GET['is_released']) ? 1 : 0;
+$title = trim($_POST['title'] ?? '');
+$content = trim($_POST['content'] ?? '');
+$is_released = isset($_POST['is_released']) ? 1 : 0;
 $user_id = (int)$_SESSION['user_id'];
 
 if (empty($title) || empty($content)) {
