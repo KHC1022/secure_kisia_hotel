@@ -28,12 +28,12 @@ $GLOBALS['total_pages'] = ceil($total_inquiries / $limit);
             <form method="get" action="inquiry.php" class="sort-form">
                 <span class="sort-label">정렬:</span>
                 <select name="sort" class="sort-select" onchange="this.form.submit()">
-                    <option value="none" <?= isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '' ?>>정렬 순서</option>
-                    <option value="recent" <?= isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '' ?>>최신순</option>
-                    <option value="old" <?= isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '' ?>>오래된순</option>
+                    <option value="none" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>정렬 순서</option>
+                    <option value="recent" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>최신순</option>
+                    <option value="old" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>오래된순</option>
                 </select>
                 <?php if (!empty($_GET['keyword'])): ?>
-                    <input type="hidden" name="keyword" value="<?= $_GET['keyword'] ?>">
+                    <input type="hidden" name="keyword" value="<?= htmlspecialchars($_GET['keyword'], ENT_QUOTES, 'UTF-8') ?>">
                 <?php endif; ?>
             </form>
             <a href="inquiry-write.php" class="write-btn">문의하기</a>
@@ -56,21 +56,21 @@ $GLOBALS['total_pages'] = ceil($total_inquiries / $limit);
             </thead>
             <tbody>
                 <?php
-                $start_num = ($page - 1) * $limit + 1;
+                $start_num = ($page - 1) * 5 + 1;
                 foreach ($inquiry_list as $inquiry): ?>
                     <tr>
-                        <td><?= $start_num++ ?></td>
-                        <td><?= $inquiry['category'] ?></td>
+                        <td><?= htmlspecialchars($start_num++, ENT_QUOTES, 'UTF-8') ?></td>
+                        <td><?= htmlspecialchars($inquiry['category'], ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
                             <?php if ($inquiry['is_secret']): ?>
                                 <span class="lock-icon">🔒</span>
                             <?php endif; ?>
-                            <a href="inquiry_detail.php?inquiry_id=<?= $inquiry['inquiry_id'] ?>">
-                                <?= $inquiry['title'] ?>
+                            <a href="inquiry_detail.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>">
+                                <?= htmlspecialchars($inquiry['title'], ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </td>
-                        <td><?= $inquiry['username'] ?></td>
-                        <td><?= $inquiry['created_at'] ?></td>
+                        <td><?= htmlspecialchars($inquiry['username'], ENT_QUOTES, 'UTF-8') ?></td>
+                        <td><?= htmlspecialchars($inquiry['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
                             <?php if ($inquiry['response']): ?>
                                 <span class="status-complete">답변완료</span>

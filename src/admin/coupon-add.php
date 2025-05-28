@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../action/admin_access.php';
 include_once __DIR__ . '/../includes/header.php';
 ?>
 

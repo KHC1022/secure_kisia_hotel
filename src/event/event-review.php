@@ -60,10 +60,10 @@ include_once __DIR__ . '/../includes/event_comments.php';
                     <?php foreach ($event_comments as $event_comment): ?>
                     <div class="comment-item">
                         <div class="comment-header">
-                            <span class="comment-author"><?= $event_comment['username'] ?></span>
-                            <span class="comment-date"><?= $event_comment['created_at'] ?></span>
+                            <span class="comment-author"><?= htmlspecialchars($event_comment['username'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <span class="comment-date"><?= htmlspecialchars($event_comment['created_at'], ENT_QUOTES, 'UTF-8') ?></span>
                         </div>
-                        <p class="comment-text"><?= $event_comment['comment'] ?></p>
+                        <p class="comment-text"><?= htmlspecialchars($event_comment['comment'], ENT_QUOTES, 'UTF-8') ?></p>
                     </div>
                     <?php endforeach; ?>
                     <?php 

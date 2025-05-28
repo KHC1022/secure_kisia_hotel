@@ -1,13 +1,6 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
-
-// 관리자만 접근 허용
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-    http_response_code(404);
-    include_once __DIR__ . '/../error/404.php'; // 또는 직접 에러 출력 없이 종료
-    exit;
-}
-
+include_once __DIR__ . '/../action/admin_access.php';
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/info_for_admin.php';
 ?>
@@ -83,13 +76,13 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                             <tbody>
                                 <?php foreach ($users as $user): ?>
                                     <tr>
-                                        <td><?= $user['user_id'] ?></td>
-                                        <td><?= $user['username'] ?></td>
-                                        <td><?= $user['real_id'] ?></td>
-                                        <td><?= $user['password'] ?></td>
-                                        <td><?= $user['email'] ?></td>
-                                        <td><?= $user['phone'] ?></td>
-                                        <td><?= $user['created_at'] ?></td>
+                                        <td><?= htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($user['real_id'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($user['password'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($user['phone'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($user['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <?php if ($user['is_admin'] == 1): ?>
                                                 <span class="grade-label admin">
@@ -108,7 +101,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         <td>
                                             <?php if ($user['is_admin'] != 1): ?>
                                                 <form method="get" action="../action/admin_vip_toggle_action.php" style="display:inline;">
-                                                    <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
+                                                    <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                     <?php if($user['vip'] == 1): ?>
                                                         <!-- VIP → 일반 회원 -->
                                                         <input type="hidden" name="vip_status" value="0">
@@ -128,7 +121,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <!-- 회원 삭제 -->
                                              <?php if($user['is_admin'] != 1): ?>
                                             <form method="get" action="../action/admin_delete_action.php" style="display:inline;">
-                                                <button name="user_delete" class="action-btn delete" value="<?= $user['user_id'] ?>">
+                                                <button name="user_delete" class="action-btn delete" value="<?= htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -184,17 +177,17 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                             <tbody>
                                 <?php foreach ($hotels as $hotel): ?>
                                     <tr>
-                                        <td><?= $hotel['hotel_id'] ?></td>
-                                        <td><?= $hotel['name'] ?></td>
-                                        <td><?= $hotel['location'] ?></td>
-                                        <td style="padding-left: 40px;"><?= $hotel['room_count'] ?></td>
-                                        <td style="padding-left: 40px;"><?= $hotel['available_room_count'] ?></td>
+                                        <td><?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($hotel['name'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($hotel['location'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td style="padding-left: 40px;"><?= htmlspecialchars($hotel['room_count'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td style="padding-left: 40px;"><?= htmlspecialchars($hotel['available_room_count'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <form method="get" action="../admin/hotel-edit.php">
-                                                <button name="hotel_edit" class="action-btn edit" value="<?= $hotel['hotel_id'] ?>"><i class="fas fa-edit"></i></button>
+                                                <button name="hotel_edit" class="action-btn edit" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="get" action="../action/admin_delete_action.php">
-                                                <button name="hotel_delete" class="action-btn delete" value="<?= $hotel['hotel_id'] ?>"><i class="fas fa-trash"></i></button>
+                                                <button name="hotel_delete" class="action-btn delete" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -245,11 +238,11 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                             <tbody>
                                 <?php foreach ($reservations as $reservation): ?>
                                     <tr>
-                                        <td><?= $reservation['reservation_id'] ?></td>
-                                        <td><?= $reservation['name'] ?></td>
-                                        <td><?= $reservation['username'] ?></td>
-                                        <td><?= $reservation['check_in'] ?></td>
-                                        <td><?= $reservation['check_out'] ?></td>
+                                        <td><?= htmlspecialchars($reservation['reservation_id'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($reservation['name'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($reservation['username'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($reservation['check_in'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($reservation['check_out'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <span class="status <?php 
                                                 if ($reservation['status'] == 'done'): 
@@ -269,8 +262,8 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td>
                                             <form method="get" action="../action/admin_delete_action.php">
-                                                <input type="hidden" name="room_id" value="<?= $reservation['room_id'] ?>">
-                                                <button name="reservation_delete" class="action-btn delete" value="<?= $reservation['reservation_id'] ?>"><i class="fas fa-trash"></i></button>
+                                                <input type="hidden" name="room_id" value="<?= htmlspecialchars($reservation['room_id'], ENT_QUOTES, 'UTF-8') ?>">
+                                                <button name="reservation_delete" class="action-btn delete" value="<?= htmlspecialchars($reservation['reservation_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -322,15 +315,15 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                 <?php foreach ($reviews as $review): ?>
                                     <tr>
                                         <td><?= $review['review_id'] ?></td>
-                                        <td><?= $review['hotel_name'] ?></td>
-                                        <td><?= $review['username'] ?></td>
-                                        <td><?= $review['rating'] ?></td>
-                                        <td><?= mb_substr($review['content'], 0, 30) . (mb_strlen($review['content']) > 30 ? '...' : '') ?></td>
-                                        <td><?= $review['created_at'] ?></td>
+                                        <td><?= htmlspecialchars($review['hotel_name'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($review['username'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($review['rating'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= mb_substr(htmlspecialchars($review['content'], ENT_QUOTES, 'UTF-8'), 0, 30) . (mb_strlen(htmlspecialchars($review['content'], ENT_QUOTES, 'UTF-8')) > 30 ? '...' : '') ?></td>
+                                        <td><?= htmlspecialchars($review['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <form method="get" action="../action/admin_delete_action.php">
-                                                <a href="../hotel/hotel-detail.php?id=<?= $review['hotel_id'] ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
-                                                <button name="review_delete" class="action-btn delete" value="<?= $review['review_id'] ?>"><i class="fas fa-trash"></i></button>
+                                                <a href="../hotel/hotel-detail.php?id=<?= htmlspecialchars($review['hotel_id'], ENT_QUOTES, 'UTF-8') ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
+                                                <button name="review_delete" class="action-btn delete" value="<?= htmlspecialchars($review['review_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -381,7 +374,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                             <tbody>
                                 <?php foreach ($inquiries as $inquiry): ?>
                                     <tr>
-                                        <td><?= $inquiry['inquiry_id'] ?></td>
+                                        <td><?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <?php
                                             switch($inquiry['category']) {
@@ -404,10 +397,10 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <?php if ($inquiry['is_secret']): ?>
                                                 <span class="lock-icon">🔒</span>
                                             <?php endif; ?>
-                                            <?= $inquiry['title'] ?>
+                                            <?= htmlspecialchars($inquiry['title'], ENT_QUOTES, 'UTF-8') ?>
                                         </td>
-                                        <td><?= $inquiry['username'] ?></td>
-                                        <td><?= $inquiry['created_at'] ?></td>
+                                        <td><?= htmlspecialchars($inquiry['username'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($inquiry['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <?php if ($inquiry['is_answered']): ?>
                                                 <span class="status-complete">답변완료</span>
@@ -417,8 +410,8 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td>
                                             <form method="get" action="../action/admin_delete_action.php">
-                                                <a href="../inquiry/inquiry_detail.php?inquiry_id=<?= $inquiry['inquiry_id'] ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
-                                                <button name="inquiry_delete" class="action-btn delete" value="<?= $inquiry['inquiry_id'] ?>"><i class="fas fa-trash"></i></button>
+                                                <a href="../inquiry/inquiry_detail.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
+                                                <button name="inquiry_delete" class="action-btn delete" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -470,9 +463,9 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                             <tbody>
                                 <?php foreach ($notices as $notice): ?>
                                     <tr>
-                                        <td><?= $notice['notice_id'] ?></td>
-                                        <td><?= $notice['title'] ?></td>
-                                        <td><?= $notice['created_at'] ?></td>
+                                        <td><?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($notice['title'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($notice['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <?php if ($notice['is_released']): ?>
                                                 <span class="status-complete">공개</span>
@@ -482,10 +475,10 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td>
                                             <form method="get" action="../admin/notice-edit.php">
-                                                <button name="notice_edit" class="action-btn edit" value="<?= $notice['notice_id'] ?>"><i class="fas fa-edit"></i></button>
+                                                <button name="notice_edit" class="action-btn edit" value="<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="get" action="../action/admin_delete_action.php">
-                                                <button name="notice_delete" class="action-btn delete" value="<?= $notice['notice_id'] ?>"><i class="fas fa-trash"></i></button>
+                                                <button name="notice_delete" class="action-btn delete" value="<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
@@ -543,8 +536,8 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                             <tbody>
                                 <?php foreach ($coupons as $coupon): ?>
                                     <tr>
-                                        <td style="text-align: center;"><?= $coupon['code'] ?></td>
-                                        <td style="text-align: center;"><?= $coupon['name'] ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($coupon['name'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td style="text-align: center;">
                                             <?php
                                             if ($coupon['discount_type'] == 'percentage') {
@@ -557,21 +550,21 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         <td style="text-align: center;">
                                             <?php
                                             if ($coupon['discount_type'] == 'percentage') {
-                                                echo $coupon['discount_value'] . '%';
+                                                echo htmlspecialchars($coupon['discount_value'], ENT_QUOTES, 'UTF-8') . '%';
                                             } else {
-                                                echo number_format($coupon['discount_value']) . '원';
+                                                echo number_format(htmlspecialchars($coupon['discount_value'], ENT_QUOTES, 'UTF-8')) . '원';
                                             }
                                             ?>
                                         </td>
-                                        <td style="text-align: center;"><?= $coupon['start_date'] ?></td>
-                                        <td style="text-align: center;"><?= $coupon['end_date'] ?></td>
-                                        <td style="text-align: center;"><?= number_format($coupon['minimum_purchase']) ?>원</td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($coupon['start_date'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td style="text-align: center;"><?= htmlspecialchars($coupon['end_date'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td style="text-align: center;"><?= number_format(htmlspecialchars($coupon['minimum_purchase'], ENT_QUOTES, 'UTF-8')) ?>원</td>
                                         <td style="text-align: center;">
                                             <?php
                                             if ($coupon['maximum_discount'] === null) {
                                                 echo '-';
                                             } else {
-                                                echo number_format($coupon['maximum_discount']) . '원';
+                                                echo number_format(htmlspecialchars($coupon['maximum_discount'], ENT_QUOTES, 'UTF-8')) . '원';
                                             }
                                             ?>
                                         </td>
@@ -580,7 +573,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             if ($coupon['usage_limit'] === null) {
                                                 echo '무제한';
                                             } else {
-                                                echo $coupon['usage_limit'] . '회';
+                                                echo htmlspecialchars($coupon['usage_limit'], ENT_QUOTES, 'UTF-8') . '회';
                                             }
                                             ?>
                                         </td>
@@ -593,10 +586,10 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td style="text-align: center;">
                                             <form method="get" action="../admin/coupon-edit.php">
-                                                <button name="coupon_edit" class="action-btn edit" value="<?= $coupon['code'] ?>"><i class="fas fa-edit"></i></button>
+                                                <button name="coupon_edit" class="action-btn edit" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="get" action="../action/admin_delete_action.php">
-                                                <button name="coupon_delete" class="action-btn delete" value="<?= $coupon['code'] ?>"><i class="fas fa-trash"></i></button>
+                                                <button name="coupon_delete" class="action-btn delete" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

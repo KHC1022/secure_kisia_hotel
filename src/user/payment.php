@@ -11,7 +11,7 @@ include_once __DIR__ . '/../includes/header.php';
             <h2>예약 정보</h2>
             <div class="summary-card">
                 <div class="payment-hotel-info">
-                    <h3><?= $hotel['name'] ?></h3>
+                    <h3><?= htmlspecialchars($hotel['name'], ENT_QUOTES, 'UTF-8') ?></h3>
                     <p class="payment-location"><i class="fas fa-map-marker-alt"></i> <?= $hotel['location'] ?></p>
                 </div>
                 <div class="booking-details">
@@ -21,9 +21,9 @@ include_once __DIR__ . '/../includes/header.php';
                     <div class="detail-item"><span class="label">인원</span><span class="value"><?= $guests ?>명</span></div>
                 </div>
                 <div class="price-summary">
-                    <div class="price-item"><span class="label">객실 요금 (<?= $days ?>박)</span><span class="value">₩<?= number_format($room_fee) ?></span></div>
-                    <div class="price-item"><span class="label">세금 및 수수료</span><span class="value">₩<?= number_format($tax) ?></span></div>
-                    <div class="price-item total"><span class="label">총 결제 금액</span><span class="value">₩<?= number_format($total_price) ?></span></div>
+                    <div class="price-item"><span class="label">객실 요금 (<?= $days ?>박)</span><span class="value">₩<?= htmlspecialchars(number_format($room_fee), ENT_QUOTES, 'UTF-8') ?></span></div>
+                    <div class="price-item"><span class="label">세금 및 수수료</span><span class="value">₩<?= htmlspecialchars(number_format($tax), ENT_QUOTES, 'UTF-8') ?></span></div>
+                    <div class="price-item total"><span class="label">총 결제 금액</span><span class="value">₩<?= htmlspecialchars(number_format($total_price), ENT_QUOTES, 'UTF-8') ?></span></div>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@ include_once __DIR__ . '/../includes/header.php';
             <form action="../action/point_pay_action.php" method="get">
                 <div class="payment-form-group">
                     <label>보유 포인트</label>
-                    <p><?= number_format($users['point']) ?> P</p>
+                    <p><?= htmlspecialchars(number_format($users['point']), ENT_QUOTES, 'UTF-8') ?> P</p>
                 </div>
 
                 <!-- 쿠폰 선택 -->
@@ -48,18 +48,18 @@ include_once __DIR__ . '/../includes/header.php';
                             ?>
                             <li style="<?= $is_used ? 'opacity:0.5; pointer-events:none;' : '' ?>">
                                 <input type="radio" name="selected_coupon" class="coupon-radio"
-                                    value="<?= $coupon['coupon_id'] ?>"
-                                    data-discount-type="<?= $coupon['discount_type'] ?>"
-                                    data-discount-value="<?= $coupon['discount_value'] ?>"
+                                    value="<?= htmlspecialchars($coupon['coupon_id'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-discount-type="<?= htmlspecialchars($coupon['discount_type'], ENT_QUOTES, 'UTF-8') ?>"
+                                    data-discount-value="<?= htmlspecialchars($coupon['discount_value'], ENT_QUOTES, 'UTF-8') ?>"
                                     <?= $is_used ? 'disabled' : '' ?>
                                     onclick="toggleCouponSelection(this)">
                                 <div>
-                                    <strong><?= $coupon['name'] ?> (<?= $coupon['code'] ?>)</strong><br>
+                                    <strong><?= htmlspecialchars($coupon['name'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>)</strong><br>
                                     <span>
                                         <?= $coupon['discount_type'] === 'percentage' 
                                                 ? intval($coupon['discount_value']).'% 할인'
-                                                : number_format($coupon['discount_value']).'원 할인' ?>
-                                        · <?= date('Y.m.d', strtotime($coupon['start_date'])) ?> ~ <?= date('Y.m.d', strtotime($coupon['end_date'])) ?>
+                                                : htmlspecialchars(number_format($coupon['discount_value']), ENT_QUOTES, 'UTF-8').'원 할인' ?>
+                                        · <?= htmlspecialchars(date('Y.m.d', strtotime($coupon['start_date'])), ENT_QUOTES, 'UTF-8') ?> ~ <?= htmlspecialchars(date('Y.m.d', strtotime($coupon['end_date'])), ENT_QUOTES, 'UTF-8') ?>
                                         <?php if ($is_used): ?>
                                             <span style="color:red; font-weight:bold;">[사용 완료]</span>
                                         <?php endif; ?>
@@ -75,8 +75,8 @@ include_once __DIR__ . '/../includes/header.php';
                 <!-- 총 결제 금액 -->
                 <div class="payment-form-group">
                     <label>총 결제 금액</label>
-                    <p id="finalPrice" data-original-price="<?= $total_price ?>"><?= number_format($total_price) ?> P</p>
-                    <input type="hidden" name="charge_amount" id="chargeAmount" value="<?= $total_price ?>">
+                    <p id="finalPrice" data-original-price="<?= $total_price ?>"><?= htmlspecialchars(number_format($total_price), ENT_QUOTES, 'UTF-8') ?> P</p>
+                    <input type="hidden" name="charge_amount" id="chargeAmount" value="<?= htmlspecialchars($total_price, ENT_QUOTES, 'UTF-8') ?>">
                 </div>
 
                 <div class="terms-agreement">
@@ -87,11 +87,11 @@ include_once __DIR__ . '/../includes/header.php';
                 <button type="submit" class="payment-btn">포인트로 결제하기</button>
 
                 <!-- 필수 값 -->
-                <input type="hidden" name="room_id" value="<?= $room_id ?>">
-                <input type="hidden" name="checkin" value="<?= $checkin ?>">
-                <input type="hidden" name="checkout" value="<?= $checkout ?>">
-                <input type="hidden" name="total_price" value="<?= $total_price ?>">
-                <input type="hidden" name="guests" value="<?= $guests ?>">
+                <input type="hidden" name="room_id" value="<?= htmlspecialchars($room_id, ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="checkin" value="<?= htmlspecialchars($checkin, ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="checkout" value="<?= htmlspecialchars($checkout, ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="total_price" value="<?= htmlspecialchars($total_price, ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="guests" value="<?= htmlspecialchars($guests, ENT_QUOTES, 'UTF-8') ?>">
             </form>
         </div>
     </div>

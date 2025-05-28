@@ -9,7 +9,7 @@ $id_name = null;
 foreach ($_GET as $key => $value) {
     if (strpos($key, '_') !== false) {
         list($prefix, $action) = explode('_', $key);
-        
+
         switch ($prefix) {
             case 'user':
                 $table_name = 'users';
@@ -40,7 +40,7 @@ foreach ($_GET as $key => $value) {
                 $id_name = 'code';
                 break;
         }
-        
+
         if ($action === 'edit' || $action === 'delete') {
             $action_type = $action;
             $id = $value;
@@ -50,32 +50,41 @@ foreach ($_GET as $key => $value) {
 }
 
 if ($action_type === 'delete') {
+    $safe_table = htmlspecialchars($table_name);
+    $safe_id = htmlspecialchars($id);
+
     if ($table_name === 'reservations') {
         if (!isset($_GET['room_id'])) {
             echo "<script>
                 alert('방 정보가 없습니다.');
-                window.location.href = '../admin/admin.php?tab=$table_name';
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
             </script>";
             exit;
         }
-        
-        $room_id = $_GET['room_id'];
-        $sql = "UPDATE reservations SET status = 'cancel' WHERE reservation_id = $id";
-        $sql2 = "UPDATE rooms SET status = 'available' WHERE room_id = $room_id";
-        $result = mysqli_query($conn, $sql);
-        $result2 = mysqli_query($conn, $sql2);
+
+        $room_id = intval($_GET['room_id']);
+
+        $stmt = $conn->prepare("UPDATE reservations SET status = 'cancel' WHERE reservation_id = ?");
+        $stmt->bind_param("i", $id);
+        $result = $stmt->execute();
+
+        $stmt2 = $conn->prepare("UPDATE rooms SET status = 'available' WHERE room_id = ?");
+        $stmt2->bind_param("i", $room_id);
+        $result2 = $stmt2->execute();
 
         if ($result && $result2) {
             echo "<script>
-                alert('$id 번 예약이 취소되었습니다.');
-                window.location.href = '../admin/admin.php?tab=$table_name';
+                alert('{$safe_id} 번 예약이 취소되었습니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
             </script>";
         }
-    }
-    else if ($table_name === 'hotels') {
-        $sql = "SELECT main_image, detail_image_1, detail_image_2, detail_image_3, detail_image_4 FROM hotels WHERE hotel_id = $id";
-        $result = mysqli_query($conn, $sql);
-        $hotel = mysqli_fetch_assoc($result);
+
+    } else if ($table_name === 'hotels') {
+        $stmt = $conn->prepare("SELECT main_image, detail_image_1, detail_image_2, detail_image_3, detail_image_4 FROM hotels WHERE hotel_id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $hotel = $result->fetch_assoc();
 
         $images = [
             $hotel['main_image'],
@@ -94,63 +103,70 @@ if ($action_type === 'delete') {
             }
         }
 
-        $sql = "DELETE FROM $table_name WHERE $id_name = $id";
-        $result = mysqli_query($conn, $sql);
+        $stmt = $conn->prepare("DELETE FROM $table_name WHERE $id_name = ?");
+        $stmt->bind_param("i", $id);
+        $result = $stmt->execute();
 
         if ($result) {
             echo "<script>
-                alert('$id 번이 삭제되었습니다.');
-                window.location.href = '../admin/admin.php?tab=$table_name';
+                alert('{$safe_id} 번이 삭제되었습니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
             </script>";
         } else {
             echo "<script>
-                alert('존재하지 않는 $table_name 입니다.');
-                window.location.href = '../admin/admin.php?tab=$table_name';
+                alert('존재하지 않는 {$safe_table} 입니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
             </script>";
         }
-    }
-    else if ($table_name === 'coupons') {
-        // 쿠폰 삭제 전 사용 중인 쿠폰인지 확인
-        $check_sql = "SELECT COUNT(*) as count FROM user_coupons WHERE coupon_id = '$id'";
-        $check_result = mysqli_query($conn, $check_sql);
-        $check_row = mysqli_fetch_assoc($check_result);
-        
+
+    } else if ($table_name === 'coupons') {
+        // 쿠폰이 사용 중인지 확인
+        $stmt = $conn->prepare("SELECT COUNT(*) as count FROM user_coupons WHERE coupon_id = ?");
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $check_result = $stmt->get_result();
+        $check_row = $check_result->fetch_assoc();
+
         if ($check_row['count'] > 0) {
             echo "<script>
-                    alert('사용 중인 쿠폰은 삭제할 수 없습니다.');
-                    window.location.href = '../admin/admin.php?tab=$table_name';
-                  </script>";
+                alert('사용 중인 쿠폰은 삭제할 수 없습니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
+            </script>";
             exit;
         }
-        
-        $sql = "DELETE FROM $table_name WHERE $id_name = '$id'";
-        $result = mysqli_query($conn, $sql);
+
+        $stmt = $conn->prepare("DELETE FROM $table_name WHERE $id_name = ?");
+        $stmt->bind_param("s", $id);
+        $result = $stmt->execute();
 
         if ($result) {
             echo "<script>
-                    alert('쿠폰이 삭제되었습니다.');
-                    window.location.href = '../admin/admin.php?tab=$table_name';
-                  </script>";
-        } else {
-            echo "<script>
-                    alert('쿠폰 삭제 중 오류가 발생했습니다.');
-                    window.location.href = '../admin/admin.php?tab=$table_name';
-                  </script>";
-        }
-    }
-    else {
-        $sql = "DELETE FROM $table_name WHERE $id_name = $id";
-        $result = mysqli_query($conn, $sql);
-
-        if ($result) {
-            echo "<script>
-                alert('$id 번이 삭제되었습니다.');
-                window.location.href = '../admin/admin.php?tab=$table_name';
+                alert('쿠폰이 삭제되었습니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
             </script>";
         } else {
             echo "<script>
-                alert('존재하지 않는 $table_name 입니다.');
-                window.location.href = '../admin/admin.php?tab=$table_name';
+                alert('쿠폰 삭제 중 오류가 발생했습니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
+            </script>";
+        }
+
+    } else {
+        // 일반 테이블 삭제 처리
+        $param_type = is_numeric($id) ? "i" : "s";
+        $stmt = $conn->prepare("DELETE FROM $table_name WHERE $id_name = ?");
+        $stmt->bind_param($param_type, $id);
+        $result = $stmt->execute();
+
+        if ($result) {
+            echo "<script>
+                alert('{$safe_id} 번이 삭제되었습니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
+            </script>";
+        } else {
+            echo "<script>
+                alert('존재하지 않는 {$safe_table} 입니다.');
+                window.location.href = '../admin/admin.php?tab={$safe_table}';
             </script>";
         }
     }

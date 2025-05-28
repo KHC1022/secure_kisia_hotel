@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../action/admin_access.php';
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/coupon_edit_info.php';
 ?>
@@ -10,57 +11,57 @@ include_once __DIR__ . '/../includes/coupon_edit_info.php';
             <h1 class="hotel-add-admin-title">쿠폰 수정</h1>
         </div>
 
-        <input type="hidden" name="code" value="<?php echo $coupon['code']; ?>">
+        <input type="hidden" name="code" value="<?php echo htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8'); ?>">
 
         <!-- 쿠폰 정보 -->
         <div class="hotel-add-admin-form-group image-upload-section">
             <div class="room-info-grid">
                 <div class="room-info-item">
                     <label for="code">쿠폰 코드</label>
-                    <input type="text" id="code" value="<?php echo $coupon['code']; ?>" disabled>
+                    <input type="text" id="code" value="<?php echo htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8'); ?>" disabled>
                     <small>쿠폰 코드는 수정할 수 없습니다.</small>
                 </div>
                 <div class="room-info-item">
                     <label for="name">쿠폰명</label>
-                    <input type="text" id="name" name="name" value="<?php echo $coupon['name']; ?>" required>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($coupon['name'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="room-info-item">
                     <label for="discount_type">할인 유형</label>
                     <select id="discount_type" name="discount_type" required>
-                        <option value="percentage" <?php echo $coupon['discount_type'] == 'percentage' ? 'selected' : ''; ?>>퍼센트</option>
-                        <option value="fixed" <?php echo $coupon['discount_type'] == 'fixed' ? 'selected' : ''; ?>>정액</option>
+                        <option value="percentage" <?php echo htmlspecialchars($coupon['discount_type'], ENT_QUOTES, 'UTF-8') == 'percentage' ? 'selected' : ''; ?>>퍼센트</option>
+                        <option value="fixed" <?php echo htmlspecialchars($coupon['discount_type'], ENT_QUOTES, 'UTF-8') == 'fixed' ? 'selected' : ''; ?>>정액</option>
                     </select>
                 </div>
                 <div class="room-info-item">
                     <label for="discount_value">할인 값</label>
-                    <input type="number" id="discount_value" name="discount_value" min="0" value="<?php echo $coupon['discount_value']; ?>" required>
+                    <input type="number" id="discount_value" name="discount_value" min="0" value="<?php echo htmlspecialchars($coupon['discount_value'], ENT_QUOTES, 'UTF-8'); ?>" required>
                     <small id="discount_hint">퍼센트 선택 시: 0-100, 정액 선택 시: 원 단위</small>
                 </div>
                 <div class="room-info-item">
                     <label for="start_date">시작일</label>
-                    <input type="date" id="start_date" name="start_date" value="<?php echo $coupon['start_date']; ?>" required>
+                    <input type="date" id="start_date" name="start_date" value="<?php echo htmlspecialchars($coupon['start_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="room-info-item">
                     <label for="end_date">종료일</label>
-                    <input type="date" id="end_date" name="end_date" value="<?php echo $coupon['end_date']; ?>" required>
+                    <input type="date" id="end_date" name="end_date" value="<?php echo htmlspecialchars($coupon['end_date'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="room-info-item">
                     <label for="minimum_purchase">최소 구매액</label>
-                    <input type="number" id="minimum_purchase" name="minimum_purchase" min="0" value="<?php echo $coupon['minimum_purchase']; ?>" required>
+                    <input type="number" id="minimum_purchase" name="minimum_purchase" min="0" value="<?php echo htmlspecialchars($coupon['minimum_purchase'], ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
                 <div class="room-info-item">
                     <label for="maximum_discount">최대 할인액</label>
-                    <input type="number" id="maximum_discount" name="maximum_discount" min="0" value="<?php echo $coupon['maximum_discount']; ?>">
+                    <input type="number" id="maximum_discount" name="maximum_discount" min="0" value="<?php echo htmlspecialchars($coupon['maximum_discount'], ENT_QUOTES, 'UTF-8'); ?>">
                     <small>퍼센트 할인 시에만 적용됩니다. 비워두면 제한 없음</small>
                 </div>
                 <div class="room-info-item">
                     <label for="usage_limit">사용 제한 횟수</label>
-                    <input type="number" id="usage_limit" name="usage_limit" min="0" value="<?php echo $coupon['usage_limit']; ?>">
+                    <input type="number" id="usage_limit" name="usage_limit" min="0" value="<?php echo htmlspecialchars($coupon['usage_limit'], ENT_QUOTES, 'UTF-8'); ?>">
                     <small>비워두면 무제한</small>
                 </div>
                 <div class="room-info-item">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="is_active" value="1" <?php echo $coupon['is_active'] ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="is_active" value="1" <?php echo htmlspecialchars($coupon['is_active'], ENT_QUOTES, 'UTF-8') ? 'checked' : ''; ?>>
                         활성화 여부 (체크 시 활성화)
                     </label>
                 </div>

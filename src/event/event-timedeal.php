@@ -23,21 +23,21 @@ include_once __DIR__ . '/../includes/hotels_info.php';
                     <div class="timedeal-deals">
                         <?php foreach ($busan_hotels as $hotel): ?>
                             <div class="timedeal-deal-item">
-                                <img src="<?= $hotel['main_image'] ?>" alt="<?= $hotel['name'] ?>" class="hotel-image">
+                                <img src="<?= htmlspecialchars($hotel['main_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($hotel['name'], ENT_QUOTES, 'UTF-8') ?>" class="hotel-image">
                                 <span class="timedeal-discount-badge">40% 할인</span>
                                 <div class="timedeal-hotel-info">
-                                    <h3 class="hotels-name"><?= $hotel['name'] ?></h3>
+                                    <h3 class="hotels-name"><?= htmlspecialchars($hotel['name'], ENT_QUOTES, 'UTF-8') ?></h3>
                                     <p class="style-location">
                                         <i class="fas fa-map-marker-alt"></i>
-                                        <?= $hotel['location'] ?>
+                                        <?= htmlspecialchars($hotel['location'], ENT_QUOTES, 'UTF-8') ?>
                                     </p>
                                     <div class="timedeal-price-info">
-                                        <span class="timedeal-original-price">₩<?= number_format($hotel['price_per_night']) ?></span>
-                                        <p class="timedeal-discount-price">₩<?= number_format($hotel['price_per_night']*0.6) ?>/박</p>
+                                        <span class="timedeal-original-price">₩<?= number_format(htmlspecialchars($hotel['price_per_night'], ENT_QUOTES, 'UTF-8')) ?></span>
+                                        <p class="timedeal-discount-price">₩<?= number_format(htmlspecialchars($hotel['price_per_night']*0.6, ENT_QUOTES, 'UTF-8')) ?>/박</p>
                                     </div>
                                     <form action="../hotel/hotel-detail.php" method="get">
                                         <input type="hidden" name="event_busan" id="event_busan" value="1">
-                                        <input type="hidden" name="id" id="id" value="<?= $hotel['hotel_id'] ?>">
+                                        <input type="hidden" name="id" id="id" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>">
                                         <button type="submit" class="style-detail-btn" style="border: none;">상세보기</button>
                                     </form>
                                 </div>

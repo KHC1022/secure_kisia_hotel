@@ -1,7 +1,7 @@
 <?php
-include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
+include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../action/login_check.php';
 
 $inquiry_id = $_GET['inquiry_id'] ?? 0;
@@ -28,29 +28,29 @@ $files_result = mysqli_query($conn, $files_sql);
                     <label for="category">분류</label>
                     <select id="category" name="category" required>
                         <option value="">분류 선택</option>
-                        <option value="reservation" <?= $inquiry['category'] === 'reservation' ? 'selected' : '' ?>>예약</option>
-                        <option value="payment" <?= $inquiry['category'] === 'payment' ? 'selected' : '' ?>>결제 및 환불</option>
-                        <option value="room" <?= $inquiry['category'] === 'room' ? 'selected' : '' ?>>객실</option>
-                        <option value="other" <?= $inquiry['category'] === 'other' ? 'selected' : '' ?>>기타</option>
+                        <option value="reservation" <?= htmlspecialchars($inquiry['category'] === 'reservation' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>예약</option>
+                        <option value="payment" <?= htmlspecialchars($inquiry['category'] === 'payment' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>결제 및 환불</option>
+                        <option value="room" <?= htmlspecialchars($inquiry['category'] === 'room' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>객실</option>
+                        <option value="other" <?= htmlspecialchars($inquiry['category'] === 'other' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>기타</option>
                     </select>
                 </div>
 
                 <div class="inquiry-form-group">
                     <label for="title">제목</label>
-                    <input type="text" id="title" name="title" value="<?= $inquiry['title'] ?>" required>
+                    <input type="text" id="title" name="title" value="<?= htmlspecialchars($inquiry['title'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
 
                 <div class="inquiry-form-group">
                     <label for="content">내용</label>
-                    <textarea id="content" name="content" required><?= $inquiry['content'] ?></textarea>
+                    <textarea id="content" name="content" required><?= htmlspecialchars($inquiry['content'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 </div>
                 <?php if ($files_result && mysqli_num_rows($files_result) > 0): ?>
                     <div class="inquiry-edit-files">
                         <h3>📎 첨부 파일</h3>
                         <div class="file-list">
                             <?php while ($file = mysqli_fetch_assoc($files_result)): ?>
-                                <a href="../<?= $file['file_path'] ?>" class="file-item" download="">
-                                    <i class="fas fa-file-alt"></i> <?=$file['file_name'] ?>
+                                <a href="../<?= htmlspecialchars($file['file_path'], ENT_QUOTES, 'UTF-8') ?>" class="file-item" download="">
+                                    <i class="fas fa-file-alt"></i> <?= htmlspecialchars($file['file_name'], ENT_QUOTES, 'UTF-8') ?>
                                 </a>
                             <?php endwhile; ?>
                         </div>
@@ -64,7 +64,7 @@ $files_result = mysqli_query($conn, $files_sql);
                 </div>
 
                 <div class="inquiry-form-actions">
-                    <a href="inquiry_detail.php?inquiry_id=<?= $inquiry['inquiry_id'] ?>" class="inquiry-write-btn inquiry-cancel-btn">취소</a>
+                    <a href="inquiry_detail.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>" class="inquiry-write-btn inquiry-cancel-btn">취소</a>
                     <button type="submit" class="inquiry-write-btn">수정 완료</button>
                 </div>
             </form>
