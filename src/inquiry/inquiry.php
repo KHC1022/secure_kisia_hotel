@@ -2,11 +2,21 @@
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../action/inquiry_action.php';
 
+// 입력값 유효성 검사
+$keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+$sort = $_GET['sort'] ?? 'none';
+$page = isset($GLOBALS['page']) && is_numeric($GLOBALS['page']) ? (int)$GLOBALS['page'] : 1;
+$limit = 10;
+
+// 화이트리스트 기반 정렬 방식 제한
+$allowed_sort = ['none', 'recent', 'old'];
+if (!in_array($sort, $allowed_sort)) {
+    $sort = 'none';
+}
+
 $inquiry_list = $GLOBALS['inquiry_list'] ?? [];
 $total_inquiries = $GLOBALS['totalInquiries'] ?? 0;
-$page = $GLOBALS['page'] ?? 1;
-$limit = 10; // 페이지당 표시할 문의 수
-$GLOBALS['total_pages'] = ceil($total_inquiries / $limit);
+$total_pages = ceil($total_inquiries / $limit);
 ?>
 
 <main class="inquiry-board-container">
@@ -28,9 +38,9 @@ $GLOBALS['total_pages'] = ceil($total_inquiries / $limit);
             <form method="get" action="inquiry.php" class="sort-form">
                 <span class="sort-label">정렬:</span>
                 <select name="sort" class="sort-select" onchange="this.form.submit()">
-                    <option value="none" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>정렬 순서</option>
-                    <option value="recent" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>최신순</option>
-                    <option value="old" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>오래된순</option>
+                    <option value="none" <?= $sort === 'none' ? 'selected' : '' ?>>정렬 순서</option>
+                    <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>>최신순</option>
+                    <option value="old" <?= $sort === 'old' ? 'selected' : '' ?>>오래된순</option>
                 </select>
                 <?php if (!empty($_GET['keyword'])): ?>
                     <input type="hidden" name="keyword" value="<?= htmlspecialchars($_GET['keyword'], ENT_QUOTES, 'UTF-8') ?>">
@@ -84,6 +94,9 @@ $GLOBALS['total_pages'] = ceil($total_inquiries / $limit);
         </table>
 
         <?php 
+        if ($total_pages > 0 && $page > $total_pages) {
+            $page = $total_pages;
+        }
         include_once __DIR__ . '/../includes/pagination.php';
         pagination($total_inquiries, $limit);
         ?>

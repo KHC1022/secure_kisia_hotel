@@ -2,8 +2,15 @@
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
 
+// 세션 체크
+if (!isset($_SESSION['user_id'])) {
+    echo "<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>";
+    exit;
+}
+
 $user_id = $_SESSION['user_id'];
-$charge_point = isset($_GET['point']) ? (float)$_GET['point'] : 0;
+$charge_point = isset($_POST['point']) && is_numeric($_POST['point']) ? (float)$_POST['point'] : 0;
+
 
 // 포인트 입력값 검증
 if ($charge_point <= 0) {
@@ -15,21 +22,25 @@ if ($charge_point <= 0) {
 $charge_point = round($charge_point, 2);
 
 // 현재 포인트 조회
-$sql = "SELECT point FROM users WHERE user_id='$user_id'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-$current_point = $row ? (float)$row['point'] : 0;
+$stmt = $conn->prepare("SELECT point FROM users WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($current_point);
+$stmt->fetch();
+$stmt->close();
 
-// 포인트 합산
-$new_point = $current_point + $charge_point;
+$current_point = $current_point ?? 0.0;
+$new_point = round($current_point + $charge_point, 2);
 
-// 소수점 2자리까지 저장 후 합산
-$update_sql = "UPDATE users SET point = ROUND('$new_point', 2) WHERE user_id = '$user_id'";
-$update_result = mysqli_query($conn, $update_sql);
+// 포인트 업데이트
+$update_stmt = $conn->prepare("UPDATE users SET point = ? WHERE user_id = ?");
+$update_stmt->bind_param("di", $new_point, $user_id);
 
-if ($update_result) {
+if ($update_stmt->execute()) {
     echo "<script>alert('포인트가 충전되었습니다.'); location.href='../user/mypage.php';</script>";
 } else {
     echo "<script>alert('포인트 충전에 실패했습니다.'); history.back();</script>";
 }
+
+$update_stmt->close();
 ?>

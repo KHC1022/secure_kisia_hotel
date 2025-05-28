@@ -5,31 +5,45 @@ include_once __DIR__ . '/../includes/db_connection.php';
 $user_id = $_SESSION['user_id'];
 
 if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === 0) {
-    $filename = basename($_FILES['profile_image']['name']);
-    $target_dir = __DIR__ . '/../uploads/';
-    $relative_path = '/uploads/' . $filename;
-    $target_file = $target_dir . $filename;
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+    $file_type = mime_content_type($_FILES['profile_image']['tmp_name']);
 
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0777, true);
+    if (!in_array($file_type, $allowed_types)) {
+        exit('허용되지 않는 파일 형식입니다.');
     }
 
-    // 파일 업로드 전 기존 프로필 이미지 삭제
-    $sql = "SELECT profile_image FROM users WHERE user_id = '$user_id'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    if ($row['profile_image'] && $row['profile_image'] !== '/image/default_profile.jpg') {
-        $old_file = __DIR__ . '/..' . $row['profile_image'];
-        if (file_exists($old_file)) {
-            unlink($old_file);
+    $ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
+    $new_filename = 'user' . $user_id . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
+
+    $target_dir = __DIR__ . '/../uploads/';
+    $relative_path = '/uploads/' . $new_filename;
+    $target_file = $target_dir . $new_filename;
+
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0755, true);
+    }
+
+    // 기존 이미지 삭제
+    $stmt = $conn->prepare("SELECT profile_image FROM users WHERE user_id = ?");
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        if (!empty($row['profile_image']) && $row['profile_image'] !== '/image/default_profile.jpg') {
+            $old_file = __DIR__ . '/..' . $row['profile_image'];
+            if (file_exists($old_file)) {
+                unlink($old_file);
+            }
         }
     }
 
     if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $target_file)) {
-        $sql = "UPDATE users SET profile_image = '$relative_path' WHERE user_id = '$user_id'";
-        mysqli_query($conn, $sql);
+        $stmt = $conn->prepare("UPDATE users SET profile_image = ? WHERE user_id = ?");
+        $stmt->bind_param('si', $relative_path, $user_id);
+        $stmt->execute();
     }
 
     header("Location: ../user/mypage.php");
     exit;
 }
+?>

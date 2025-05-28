@@ -1,13 +1,14 @@
 <?php 
-if (isset($_GET['file'])) {
-    include($_GET['file']);
-    exit;
-}
+// 보안상 위험한 LFI 코드 제거 (include($_GET['file']))
 
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/hotel_detail_info.php';
 
 $room_type = $_GET['room_type'] ?? 'deluxe';
+// room_type 값 화이트리스트 검증
+if (!in_array($room_type, ['deluxe', 'suite'])) {
+    $room_type = 'deluxe';
+}
 ?>
     <main class="hotel-detail-container">
         <div class="hotel-header">

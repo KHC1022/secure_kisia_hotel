@@ -2,61 +2,78 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
-$inquiry_id = $_POST['inquiry_id'];
-$category = $_POST['category'];
-$title = $_POST['title'];
-$content = $_POST['content'];
+$inquiry_id = isset($_POST['inquiry_id']) ? (int)$_POST['inquiry_id'] : 0;
+$category = trim($_POST['category'] ?? '');
+$title = trim($_POST['title'] ?? '');
+$content = trim($_POST['content'] ?? '');
 
-// 문의 내용 업데이트
-$update_sql = "UPDATE inquiries SET category='$category', title='$title', content='$content' WHERE inquiry_id=$inquiry_id";
-$update_result = mysqli_query($conn, $update_sql);
+if ($inquiry_id < 1 || !$category || !$title || !$content) {
+    echo "<script>alert('입력 값이 유효하지 않습니다.'); history.back();</script>";
+    exit;
+}
 
-if ($update_result) {
-    // 새 파일이 업로드된 경우
-    if (isset($_FILES['files']) && $_FILES['files']['error'] == 0) {
-        // 기존 파일 정보 조회
-        $select_sql = "SELECT file_path FROM inquiry_files WHERE inquiry_id=$inquiry_id";
-        $result = mysqli_query($conn, $select_sql);
-        
-        // 기존 파일 물리적 삭제
-        while($row = mysqli_fetch_assoc($result)) {
-            $file_name = basename($row['file_path']);
-            $absolute_path = dirname(__DIR__) . '/uploads/' . $file_name;
-            
-            if (file_exists($absolute_path)) {
-                if (@unlink($absolute_path)) {
-                    echo "<script>console.log('파일 삭제 성공: " . $absolute_path . "');</script>";
-                } else {
-                    echo "<script>console.log('파일 삭제 실패: " . $absolute_path . "');</script>";
-                }
-            } else {
-                echo "<script>console.log('파일이 존재하지 않음: " . $absolute_path . "');</script>";
-            }
-        }
-        
-        // 기존 파일 DB 삭제
-        $delete_sql = "DELETE FROM inquiry_files WHERE inquiry_id=$inquiry_id";
-        mysqli_query($conn, $delete_sql);
-        
-        // 새 파일 업로드
-        $upload_dir = dirname(__DIR__) . '/uploads/';
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0777);
-        }
-        
-        $file_name = $_FILES['files']['name'];
-        $file_tmp = $_FILES['files']['tmp_name'];
-        $file_path = $upload_dir . $file_name;
-        $db_file_path = 'uploads/' . $file_name;
-        
-        if (move_uploaded_file($file_tmp, $file_path)) {
-            $insert_sql = "INSERT INTO inquiry_files (inquiry_id, file_name, file_path) VALUES ($inquiry_id, '$file_name', '$db_file_path')";
-            mysqli_query($conn, $insert_sql);
+// ✅ 게시글 수정
+$stmt = $conn->prepare("UPDATE inquiries SET category = ?, title = ?, content = ? WHERE inquiry_id = ?");
+$stmt->bind_param("sssi", $category, $title, $content, $inquiry_id);
+$update_result = $stmt->execute();
+
+if (!$update_result) {
+    echo "<script>alert('수정 실패'); history.back();</script>";
+    exit;
+}
+
+// ✅ 파일 업로드 처리
+if (isset($_FILES['files']) && is_array($_FILES['files']['name']) && $_FILES['files']['name'][0] !== '') {
+    $allowed_ext = ['jpg', 'jpeg', 'png', 'pdf', 'txt', 'zip', 'docx'];
+    $allowed_mime = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain', 'application/zip', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+    // 기존 파일 삭제
+    $select_stmt = $conn->prepare("SELECT file_path FROM inquiry_files WHERE inquiry_id = ?");
+    $select_stmt->bind_param("i", $inquiry_id);
+    $select_stmt->execute();
+    $result = $select_stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $abs_path = realpath(__DIR__ . '/../' . $row['file_path']);
+        if ($abs_path && file_exists($abs_path)) {
+            unlink($abs_path);
         }
     }
-    
-    echo "<script>alert('수정되었습니다.'); location.href='../inquiry/inquiry_detail.php?inquiry_id=$inquiry_id';</script>";
-} else {
-    echo "<script>alert('수정 실패'); history.back();</script>";
+
+    // DB 내 기존 파일 삭제
+    $del_stmt = $conn->prepare("DELETE FROM inquiry_files WHERE inquiry_id = ?");
+    $del_stmt->bind_param("i", $inquiry_id);
+    $del_stmt->execute();
+
+    // 업로드 디렉터리 확인
+    $upload_dir = realpath(__DIR__ . '/../uploads');
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0775, true);
+    }
+
+    foreach ($_FILES['files']['name'] as $i => $original_name) {
+        $tmp_name = $_FILES['files']['tmp_name'][$i];
+        $ext = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+        $mime = mime_content_type($tmp_name);
+
+        if (!in_array($ext, $allowed_ext) || !in_array($mime, $allowed_mime)) {
+            echo "<script>alert('허용되지 않은 파일 형식입니다.'); history.back();</script>";
+            exit;
+        }
+
+        $new_name = uniqid('file_', true) . '.' . $ext;
+        $target_path = $upload_dir . '/' . $new_name;
+        $db_path = 'uploads/' . $new_name;
+
+        if (move_uploaded_file($tmp_name, $target_path)) {
+            $insert_stmt = $conn->prepare("INSERT INTO inquiry_files (inquiry_id, file_name, file_path) VALUES (?, ?, ?)");
+            $insert_stmt->bind_param("iss", $inquiry_id, $original_name, $db_path);
+            $insert_stmt->execute();
+        } else {
+            echo "<script>alert('파일 업로드 실패'); history.back();</script>";
+            exit;
+        }
+    }
 }
-?>
+
+echo "<script>alert('수정되었습니다.'); location.href='../inquiry/inquiry_detail.php?inquiry_id={$inquiry_id}';</script>";
+exit;

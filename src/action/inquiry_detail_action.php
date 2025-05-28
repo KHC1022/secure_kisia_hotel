@@ -9,15 +9,18 @@ if ($inquiry_id < 1) {
     exit;
 }
 
-// 문의 조회
+// 문의 조회 (Prepared Statement)
 $query = "
     SELECT i.*, u.username 
     FROM inquiries i
     JOIN users u ON i.user_id = u.user_id
-    WHERE i.inquiry_id = $inquiry_id
+    WHERE i.inquiry_id = ?
 ";
-$result = mysqli_query($conn, $query);
-$inquiry = mysqli_fetch_assoc($result);
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $inquiry_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$inquiry = $result->fetch_assoc();
 
 if (!$inquiry) {
     echo "<script>alert('존재하지 않는 문의입니다.'); history.back();</script>";
@@ -39,22 +42,28 @@ if ($inquiry['is_secret']) {
 $res_query = "
     SELECT content, created_at 
     FROM inquiry_responses 
-    WHERE inquiry_id = $inquiry_id 
+    WHERE inquiry_id = ? 
     ORDER BY response_id ASC LIMIT 1
 ";
-$res_result = mysqli_query($conn, $res_query);
-$response = mysqli_fetch_assoc($res_result);
+$res_stmt = $conn->prepare($res_query);
+$res_stmt->bind_param("i", $inquiry_id);
+$res_stmt->execute();
+$res_result = $res_stmt->get_result();
+$response = $res_result->fetch_assoc();
 
 // 파일 조회
 $file_query = "
     SELECT file_name, file_path 
     FROM inquiry_files 
-    WHERE inquiry_id = $inquiry_id
+    WHERE inquiry_id = ?
 ";
-$file_result = mysqli_query($conn, $file_query);
+$file_stmt = $conn->prepare($file_query);
+$file_stmt->bind_param("i", $inquiry_id);
+$file_stmt->execute();
+$file_result = $file_stmt->get_result();
 
 $files = [];
-while ($file_row = mysqli_fetch_assoc($file_result)) {
+while ($file_row = $file_result->fetch_assoc()) {
     $files[] = $file_row;
 }
 
@@ -62,3 +71,4 @@ while ($file_row = mysqli_fetch_assoc($file_result)) {
 $GLOBALS['inquiry'] = $inquiry;
 $GLOBALS['response'] = $response;
 $GLOBALS['files'] = $files;
+?>
