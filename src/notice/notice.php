@@ -13,21 +13,23 @@ include_once __DIR__ . '/../includes/notice_info.php';
             <div class="hotels-search-row">
                 <div class="hotels-search-input">
                     <i class="fas fa-search"></i>
-                    <input class="hotels-search-input-input" type="text" name="search" placeholder="제목을 입력하세요" value="<?= $search ?>">
+                    <input class="hotels-search-input-input" type="text" name="search" placeholder="제목을 입력하세요"
+                        value="<?= htmlspecialchars($search ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 <button class="style-search-btn" type="submit">검색</button>
             </div>
         </form>
+
         <div class="controls-row">
             <form method="get" action="notice.php" class="sort-form">
                 <span class="sort-label">정렬:</span>
                 <select name="sort" class="sort-select" onchange="this.form.submit()">
-                    <option value="none" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>정렬 순서</option>
-                    <option value="recent" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>최신순</option>
-                    <option value="old" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>오래된순</option>
+                    <option value="none" <?= isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '' ?>>정렬 순서</option>
+                    <option value="recent" <?= isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '' ?>>최신순</option>
+                    <option value="old" <?= isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '' ?>>오래된순</option>
                 </select>
                 <?php if (!empty($search)): ?>
-                    <input type="hidden" name="search" value="<?= $search ?>">
+                    <input type="hidden" name="search" value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>">
                 <?php endif; ?>
             </form>
         </div>
@@ -53,7 +55,7 @@ include_once __DIR__ . '/../includes/notice_info.php';
                     <tr>
                         <td><?= htmlspecialchars($start_num++, ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
-                            <a href="../notice/notice-detail.php?notice_id=<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>">
+                            <a href="../notice/notice-detail.php?notice_id=<?= urlencode($notice['notice_id']) ?>">
                                 <?= htmlspecialchars($notice['title'], ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </td>
