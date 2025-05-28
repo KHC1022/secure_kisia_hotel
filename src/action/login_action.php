@@ -1,38 +1,40 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
-$id = $_GET['real_id'];
-$password = $_GET['password'];
 
-$sql = "SELECT user_id, real_id, username, password, is_admin FROM users WHERE real_id='$id' AND password='$password'";
-$result = $conn->query($sql);
-$row = $result->fetch_array(MYSQLI_ASSOC);
+$id = trim($_POST['real_id'] ?? '');
+$password = $_POST['password'] ?? '';
 
-if ($row!=null) {
-    $_SESSION['is_login'] = true;
-    $_SESSION['username'] = $row['username'];
-    $_SESSION['real_id'] = $row['real_id'];
-    $_SESSION['user_id'] = $row['user_id'];
-    $_SESSION['is_admin'] = $row['is_admin'];
-
-    if(isset($_SESSION['is_admin']) && $_SESSION['is_admin']):
-        echo "<script>
-                alert('관리자님 안녕하세요.');
-                window.location.href = '../admin/admin.php';
-        </script>";
-    else:
-        echo "<script>
-                alert('로그인 되었습니다.');
-                window.location.href = '../index.php';
-        </script>";
-    endif;
+if ($id === '' || $password === '') {
+    echo "<script>alert('아이디 또는 비밀번호를 입력해주세요.'); history.back();</script>";
     exit;
 }
-else {
-    echo "<script>
-            alert('아이디 또는 패스워드가 틀렸습니다.');
-            history.back();
-    </script>";
+
+// 사용자 조회 (SQL Injection 방지 위해 prepare 사용)
+$stmt = $conn->prepare("SELECT user_id, real_id, username, password, is_admin FROM users WHERE real_id = ?");
+$stmt->bind_param("s", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if ($user && password_verify($password, $user['password'])) {
+    // 세션 설정
+    $_SESSION['is_login'] = true;
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['real_id'] = $user['real_id'];
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['is_admin'] = $user['is_admin'];
+
+    // 로그인 성공 후 리디렉션
+    if ($user['is_admin']) {
+        echo "<script>alert('관리자님 안녕하세요.'); location.href = '../admin/admin.php';</script>";
+    } else {
+        echo "<script>alert('로그인 되었습니다.'); location.href = '../index.php';</script>";
+    }
+    exit;
+} else {
+    // 로그인 실패
+    echo "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.'); history.back();</script>";
     exit;
 }
 ?>

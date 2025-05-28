@@ -1,4 +1,13 @@
-<?php 
+<?php
+include_once __DIR__ . '/../includes/session.php';
+
+// 관리자만 접근 허용
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+    http_response_code(404);
+    include_once __DIR__ . '/../error/404.php'; // 또는 직접 에러 출력 없이 종료
+    exit;
+}
+
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/info_for_admin.php';
 ?>
