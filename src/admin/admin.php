@@ -99,7 +99,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td>
                                             <?php if ($user['is_admin'] != 1): ?>
-                                                <form method="get" action="../action/admin_vip_toggle_action.php" style="display:inline;">
+                                                <form method="post" action="../action/admin_vip_toggle_action.php" style="display:inline;">
                                                     <input type="hidden" name="user_id" value="<?= htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                     <?php if($user['vip'] == 1): ?>
                                                         <!-- VIP → 일반 회원 -->
@@ -183,7 +183,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         <td style="padding-left: 40px;"><?= htmlspecialchars($hotel['available_room_count'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <form method="get" action="../admin/hotel-edit.php">
-                                                <button name="hotel_edit" class="action-btn edit" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
+                                                <button name="hotel_id" class="action-btn edit" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="post" action="../action/admin_delete_action.php">
                                                 <button name="hotel_delete" class="action-btn delete" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
