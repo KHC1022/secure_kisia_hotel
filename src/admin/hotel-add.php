@@ -7,6 +7,7 @@ include_once __DIR__ . '/../includes/header.php';
 
     <form action="../action/hotel_add_action.php" method="POST" enctype="multipart/form-data" class="hotel-add-admin-form">
     <input type="hidden" name="hotel_id" value="<?php echo htmlspecialchars($hotel_id, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
     <div class="hotel-add-admin-header">
         <a href="admin.php?tab=hotels" class="hotel-add-admin-back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>
         <h1 class="hotel-add-admin-title">호텔 추가</h1>

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit('허용되지 않은 요청 방식입니다.');
 }
 
-// ✅ 입력값 필터링
+// 입력값 필터링
 $code = trim($_GET['code'] ?? '');
 $name = trim($_GET['name'] ?? '');
 $discount_type = trim($_GET['discount_type'] ?? '');
@@ -19,7 +19,7 @@ $maximum_discount = isset($_GET['maximum_discount']) ? (int)$_GET['maximum_disco
 $usage_limit = isset($_GET['usage_limit']) ? (int)$_GET['usage_limit'] : null;
 $is_active = isset($_GET['is_active']) ? 1 : 0;
 
-// ✅ 할인 유형 및 날짜 유효성 검사
+// 할인 유형 및 날짜 유효성 검사
 if (!in_array($discount_type, ['percentage', 'fixed'])) {
     echo "<script>alert('유효하지 않은 할인 유형입니다.'); history.back();</script>";
     exit;
@@ -33,7 +33,7 @@ if (strtotime($start_date) === false || strtotime($end_date) === false || $start
     exit;
 }
 
-// ✅ 쿠폰 존재 여부 확인 (Prepared Statement)
+// 쿠폰 존재 여부 확인
 $check_stmt = $conn->prepare("SELECT 1 FROM coupons WHERE code = ?");
 $check_stmt->bind_param("s", $code);
 $check_stmt->execute();
@@ -43,7 +43,7 @@ if ($check_stmt->num_rows === 0) {
     exit;
 }
 
-// ✅ 쿠폰 수정 처리
+// 쿠폰 수정 처리
 $stmt = $conn->prepare("
     UPDATE coupons SET 
         name = ?, 

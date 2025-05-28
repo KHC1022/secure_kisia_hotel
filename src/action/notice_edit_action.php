@@ -1,17 +1,9 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
+include_once __DIR__ . '/../action/login_check.php';
 
-// ✅ 로그인 여부 확인
-if (!isset($_SESSION['user_id'])) {
-    echo "<script>
-            alert('로그인이 필요합니다.');
-            window.location.href = '../user/login.php';
-          </script>";
-    exit;
-}
-
-// ✅ 요청 방식 확인
+// 요청 방식 확인
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     echo "<script>
             alert('잘못된 요청 방식입니다.');
@@ -20,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// ✅ 입력값 필터링
-$notice_id = isset($_GET['notice_id']) ? (int)$_GET['notice_id'] : 0;
-$title = trim($_GET['title'] ?? '');
-$content = trim($_GET['content'] ?? '');
-$is_released = isset($_GET['is_released']) ? 1 : 0;
+// 입력값 필터링
+$notice_id = isset($_POST['notice_id']) ? (int)$_POST['notice_id'] : 0;
+$title = trim($_POST['title'] ?? '');
+$content = trim($_POST['content'] ?? '');
+$is_released = isset($_POST['is_released']) ? 1 : 0;
 
-// ✅ 필수값 확인
+// 필수값 확인
 if ($notice_id < 1 || empty($title) || empty($content)) {
     echo "<script>
             alert('모든 항목을 입력해주세요.');
@@ -35,7 +27,6 @@ if ($notice_id < 1 || empty($title) || empty($content)) {
     exit;
 }
 
-// ✅ Prepared Statement 사용
 $sql = "UPDATE notices 
         SET title = ?, 
             content = ?, 

@@ -3,12 +3,7 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/coupon_info.php';
 include_once __DIR__ . '/../includes/header.php';
-
-// 로그인 확인
-if (!isset($_SESSION['user_id'])) {
-    echo "<script>alert('로그인이 필요합니다.'); location.href='/user/login.php';</script>";
-    exit;
-}
+include_once __DIR__ . '/../action/login_check.php';
 
 // CSRF 토큰 생성
 if (empty($_SESSION['csrf_token'])) {

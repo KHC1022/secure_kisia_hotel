@@ -1,12 +1,7 @@
 <?php
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
-
-// 세션 체크
-if (!isset($_SESSION['user_id'])) {
-    echo "<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>";
-    exit;
-}
+include_once __DIR__ . '/../action/login_check.php';
 
 $user_id = $_SESSION['user_id'];
 $charge_point = isset($_POST['point']) && is_numeric($_POST['point']) ? (float)$_POST['point'] : 0;

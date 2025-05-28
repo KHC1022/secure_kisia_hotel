@@ -2,6 +2,14 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
+// 관리자가 아닌 경우 CSRF 토큰 검증
+if (!isset($_SESSION['is_admin'])) {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+        echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+        exit;
+    }
+}
+
 $action_type = null;
 $table_name = null;
 $id_name = null;
@@ -54,7 +62,7 @@ if ($action_type === 'delete') {
     $safe_id = htmlspecialchars($id);
 
     if ($table_name === 'reservations') {
-        if (!isset($_GET['room_id'])) {
+        if (!isset($_POST['room_id'])) {
             echo "<script>
                 alert('방 정보가 없습니다.');
                 window.location.href = '../admin/admin.php?tab={$safe_table}';
@@ -62,7 +70,7 @@ if ($action_type === 'delete') {
             exit;
         }
 
-        $room_id = intval($_GET['room_id']);
+        $room_id = intval($_POST['room_id']);
 
         $stmt = $conn->prepare("UPDATE reservations SET status = 'cancel' WHERE reservation_id = ?");
         $stmt->bind_param("i", $id);
@@ -120,7 +128,6 @@ if ($action_type === 'delete') {
         }
 
     } else if ($table_name === 'coupons') {
-        // 쿠폰이 사용 중인지 확인
         $stmt = $conn->prepare("SELECT COUNT(*) as count FROM user_coupons WHERE coupon_id = ?");
         $stmt->bind_param("s", $id);
         $stmt->execute();
@@ -152,7 +159,6 @@ if ($action_type === 'delete') {
         }
 
     } else {
-        // 일반 테이블 삭제 처리
         $param_type = is_numeric($id) ? "i" : "s";
         $stmt = $conn->prepare("DELETE FROM $table_name WHERE $id_name = ?");
         $stmt->bind_param($param_type, $id);

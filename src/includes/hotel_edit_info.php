@@ -2,10 +2,17 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
-$hotel_id = isset($_GET['hotel_id']) ? (int)$_GET['hotel_id'] : 0;
+// 관리자 권한 체크
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+    echo "<script>alert('관리자 권한이 필요합니다.'); history.back();</script>";
+    exit;
+}
+
+// POST 파라미터로 호텔 ID 받기
+$hotel_id = isset($_POST['hotel_id']) ? (int)$_POST['hotel_id'] : 0;
 
 if ($hotel_id <= 0) {
-    error_log("잘못된 호텔 ID: " . ($_GET['hotel_id'] ?? '설정되지 않음'));
+    error_log("잘못된 호텔 ID: " . ($_POST['hotel_id'] ?? '설정되지 않음'));
     echo "<script>alert('잘못된 접근입니다.'); history.back();</script>";
     exit;
 }

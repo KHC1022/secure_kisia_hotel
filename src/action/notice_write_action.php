@@ -1,17 +1,9 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
+include_once __DIR__ . '/../action/login_check.php';
 
-// ✅ 로그인 여부 확인
-if (!isset($_SESSION['user_id'])) {
-    echo "<script>
-            alert('로그인이 필요합니다.');
-            window.location.href = '../user/login.php';
-          </script>";
-    exit;
-}
-
-// ✅ GET이 아닌 경우 차단
+// GET이 아닌 경우 차단
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     echo "<script>
             alert('잘못된 요청입니다.');
@@ -20,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// ✅ 입력값 필터링 및 유효성 검사
+// 입력값 필터링 및 유효성 검사
 $title = trim($_GET['title'] ?? '');
 $content = trim($_GET['content'] ?? '');
 $is_released = isset($_GET['is_released']) ? 1 : 0;
@@ -34,7 +26,6 @@ if (empty($title) || empty($content)) {
     exit;
 }
 
-// ✅ Prepared Statement로 SQL 인젝션 방지
 $stmt = $conn->prepare("INSERT INTO notices (user_id, title, content, is_released, created_at) VALUES (?, ?, ?, ?, NOW())");
 $stmt->bind_param("issi", $user_id, $title, $content, $is_released);
 
