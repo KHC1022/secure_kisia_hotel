@@ -2,20 +2,34 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
-$hotel_id = $_GET['id'];
+$hotel_id = (int)$_GET['id'];
 $today = date('Y-m-d');
 
 // 이벤트 변수 초기화
 $event_busan = 0;
 $event_japan = 0;
 
-if (isset($_GET['event_busan'])) {
-    $event_busan = $_GET['event_busan'];
+if (!isset($_GET['id']) || !is_numeric($_GET['id']) || (int)$_GET['id'] <= 0) {
+    echo "<script>alert('잘못된 접근입니다.'); history.back();</script>";
+    exit;
 }
 
-if (isset($_GET['event_japan'])) {
-    $event_japan = $_GET['event_japan'];
+// 호텔 정보 조회
+$stmt = $conn->prepare("SELECT * FROM hotels WHERE hotel_id = ?");
+$stmt->bind_param("i", $hotel_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows === 0) {
+    echo "<script>alert('존재하지 않는 호텔입니다.'); history.back();</script>";
+    exit;
 }
+
+// 이벤트 허용 호텔
+$event_busan_hotel_ids = [43, 3, 49]; 
+$event_japan_hotel_ids = [6, 21, 46];
+
+$event_busan = isset($_GET['event_busan']) && in_array($hotel_id, $event_busan_hotel_ids) ? 1 : 0;
+$event_japan = isset($_GET['event_japan']) && in_array($hotel_id, $event_japan_hotel_ids) ? 1 : 0;
 
 $sql = "SELECT * FROM hotels WHERE hotel_id = $hotel_id";
 $result = $conn->query($sql);

@@ -91,7 +91,6 @@ if (in_array($sort, $valid_sort_options)) {
     $query .= " ORDER BY h.hotel_id ASC";
 }
 
-// prepare + bind
 $stmt = $conn->prepare($query);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
@@ -114,7 +113,7 @@ $total_pages = ceil($total_hotels / 9);
 $start_index = ($page - 1) * 9;
 $current_hotels = array_slice($hotels, $start_index, 9);
 
-// 추천 호텔 (정적 ID)
+// 추천 호텔
 $featured_hotels = [];
 $featured_ids = [5, 34, 41];
 $id_placeholders = implode(',', array_fill(0, count($featured_ids), '?'));

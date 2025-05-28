@@ -46,36 +46,7 @@ error_log("Error page displayed: HTTP $code - $errorMessage");
 <head>
     <meta charset="UTF-8">
     <title>오류 <?= htmlspecialchars($code) ?></title>
-    <style>
-        body {
-            background-color: #f8f8f8;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .error-container {
-            text-align: center;
-        }
-        .error-code {
-            font-size: 8em;
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        .error-message {
-            font-size: 1.5em;
-            color: #333;
-        }
-        .home-link {
-            margin-top: 20px;
-            display: inline-block;
-            text-decoration: none;
-            color: #3498db;
-            font-size: 1em;
-        }
-    </style>
+    <link rel="stylesheet" href="/../style/error.css">
 </head>
 <body>
     <div class="error-container">
