@@ -27,15 +27,15 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php';
         </div>
         <?php endif; ?>
         <div class="inquiry-header">
-            <h2 class="inquiry-title"><?= $inquiry['title'] ?></h2>
+            <h2 class="inquiry-title"><?= htmlspecialchars($inquiry['title'], ENT_QUOTES, 'UTF-8') ?></h2>
             <div class="inquiry-meta">
-                <span class="writer">작성자: <?= $inquiry['username'] ?></span>
-                <span class="date">작성일: <?= date('Y-m-d H:i', strtotime($inquiry['created_at'])) ?></span>
+                <span class="writer">작성자: <?= htmlspecialchars($inquiry['username'], ENT_QUOTES, 'UTF-8') ?></span>
+                <span class="date">작성일: <?= htmlspecialchars(date('Y-m-d H:i', strtotime($inquiry['created_at'])), ENT_QUOTES, 'UTF-8') ?></span>
             </div>
         </div>
 
         <div class="inquiry-content">
-            <p><?= nl2br($inquiry['content']) ?></p>
+            <p><?= nl2br(htmlspecialchars($inquiry['content'], ENT_QUOTES, 'UTF-8')) ?></p>
         </div>
 
         <?php if (!empty($files)): ?>
@@ -43,8 +43,8 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php';
                 <h3>📎 첨부 파일</h3>
                 <div class="file-list">
                     <?php foreach ($files as $file): ?>
-                        <a href="../action/file_download_action.php?file=<?= urlencode($file['file_path']) ?>" class="file-item">
-                            <i class="fas fa-file-alt"></i> <?= $file['file_name'] ?>
+                        <a href="../action/file_download_action.php?file=<?= urlencode(htmlspecialchars($file['file_path'], ENT_QUOTES, 'UTF-8')) ?>" class="file-item">
+                            <i class="fas fa-file-alt"></i> <?= htmlspecialchars($file['file_name'], ENT_QUOTES, 'UTF-8') ?>
                         </a>
                     <?php endforeach; ?>
                 </div>
@@ -54,9 +54,9 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php';
         <!-- 작성자 또는 관리자 수정/삭제 -->
         <?php if ((isset($_SESSION['user_id']) && $_SESSION['user_id'] == $inquiry['user_id']) || ($_SESSION['is_admin'] ?? false)): ?>
         <div class="inquiry-actions">
-            <a href="inquiry_edit.php?inquiry_id=<?= $inquiry['inquiry_id'] ?>" class="inquiry-edit-btn">수정</a>
+            <a href="inquiry_edit.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>" class="inquiry-edit-btn">수정</a>
             <form action="../action/inquiry_delete_action.php" method="get" onsubmit="return confirm('정말 삭제하시겠습니까?');" style="display:inline;">
-                <input type="hidden" name="inquiry_id" value="<?= $inquiry['inquiry_id'] ?>">
+                <input type="hidden" name="inquiry_id" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>">
                 <button type="submit" class="inquiry-delete-btn">삭제</button>
             </form>
         </div>
@@ -69,16 +69,16 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php';
                     <h2 class="inquiry-title" style="color: #7851A9;">답변</h2>
                     <div class="inquiry-meta">
                         <span class="writer">작성자 : 관리자</span>
-                        <span class="date">작성일: <?= date('Y-m-d H:i', strtotime($response['created_at'])) ?></span>
+                        <span class="date">작성일: <?= htmlspecialchars(date('Y-m-d H:i', strtotime($response['created_at'])), ENT_QUOTES, 'UTF-8') ?></span>
                     </div>
                 </div>
                 <div class="answer-content">
-                    <p><?= nl2br($response['content']) ?></p>
+                    <p><?= nl2br(htmlspecialchars($response['content'], ENT_QUOTES, 'UTF-8')) ?></p>
                 </div>
                 <!-- 관리자일 경우 수정 버튼 -->
                 <?php if ($_SESSION['is_admin'] ?? false): ?>
                     <div class="admin-actions">
-                    <a href="inquiry_response_edit.php?inquiry_id=<?= $inquiry['inquiry_id'] ?>" class="inquiry-edit-btn">답변 수정</a>
+                    <a href="inquiry_response_edit.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>" class="inquiry-edit-btn">답변 수정</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -88,7 +88,7 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php';
             <div class="admin-answer-form">
                 <h2>답변 작성</h2>
                 <form action="../action/inquiry_response_action.php" method="get">
-                    <input type="hidden" name="inquiry_id" value="<?= $inquiry['inquiry_id'] ?>">
+                    <input type="hidden" name="inquiry_id" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>">
                     <textarea name="content" rows="6" style="width:100%;" required></textarea>
                     <div style="margin-top: 0.5rem; text-align: right;">
                         <button type="submit" class="inquiry-edit-btn">등록</button>

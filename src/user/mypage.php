@@ -27,8 +27,8 @@ $users = $GLOBALS['users'];
                         <input type="file" id="profileUpload" name="profile_image" accept="image/*" style="display: none;" onchange="this.form.submit()">
                     </div>
                 </form>
-                <h2 id="username"><?= $users['username']?></h2>
-                <p id="email"><?= $users['email']?></p>
+                <h2 id="username"><?=htmlspecialchars($users['username'], ENT_QUOTES, 'UTF-8')?></h2>
+                <p id="email"><?=htmlspecialchars($users['email'], ENT_QUOTES, 'UTF-8')?></p>
                 <div class="member-grade">
                     <?php if($users['vip']): ?>
                         <span class="vip-badge">VIP 회원</span>
@@ -58,7 +58,7 @@ $users = $GLOBALS['users'];
                         <?php foreach ($reservations as $reservation): ?>
                         <div class="reservation-card">
                             <div class="reservation-header">
-                                <h3><?=$reservation['hotel_name']?></h3>
+                                <h3><?=htmlspecialchars($reservation['hotel_name'], ENT_QUOTES, 'UTF-8')?></h3>
                                 <?php if($reservation['status'] == 'done'): ?>
                                     <span class="status-complete">예약확정</span>
                                 <?php elseif($reservation['status'] == 'cancel'): ?>
@@ -68,11 +68,11 @@ $users = $GLOBALS['users'];
                             <div class="reservation-details">
                                 <div class="mypage-detail-item">
                                     <i class="fas fa-calendar"></i>
-                                    <span>체크인:  <?=$reservation['check_in']?></span>
+                                    <span>체크인:  <?=htmlspecialchars($reservation['check_in'], ENT_QUOTES, 'UTF-8')?></span>
                                 </div>
                                 <div class="mypage-detail-item">
                                     <i class="fas fa-calendar"></i>
-                                    <span>체크아웃:  <?=$reservation['check_out']?></span>
+                                    <span>체크아웃:  <?=htmlspecialchars($reservation['check_out'], ENT_QUOTES, 'UTF-8')?></span>
                                 </div>
                                 <div class="mypage-detail-item">
                                     <i class="fas fa-bed"></i>
@@ -89,8 +89,8 @@ $users = $GLOBALS['users'];
                             </div>
                             <?php if($reservation['status'] == 'done'): ?>
                             <form method="get" action="../action/reservation_cancel_action.php">
-                                <input type="hidden" name="reservation_id" value="<?=$reservation['reservation_id']?>">
-                                <input type="hidden" name="room_id" value="<?=$reservation['room_id']?>">
+                                <input type="hidden" name="reservation_id" value="<?=htmlspecialchars($reservation['reservation_id'], ENT_QUOTES, 'UTF-8')?>">
+                                <input type="hidden" name="room_id" value="<?=htmlspecialchars($reservation['room_id'], ENT_QUOTES, 'UTF-8')?>">
                                 <div class="reservation-actions">
                                     <button class="mypage-cancel-btn">예약 취소</button>
                                 </div>
@@ -115,11 +115,11 @@ $users = $GLOBALS['users'];
                         </div>
                         <div class="mypage-form-group">
                             <label for="email">이메일</label>
-                            <input type="email" id="email" value="<?= $users['email'] ?>" readonly class="readonly-input">
+                            <input type="email" id="email" value="<?=htmlspecialchars($users['email'], ENT_QUOTES, 'UTF-8')?>" readonly class="readonly-input">
                         </div>
                         <div class="mypage-form-group">
                             <label for="phone">전화번호</label>
-                            <input type="tel" id="phone" value="<?= $users['phone'] ?>" readonly class="readonly-input">
+                            <input type="tel" id="phone" value="<?=htmlspecialchars($users['phone'], ENT_QUOTES, 'UTF-8')?>" readonly class="readonly-input">
                         </div>
                         <div class="mypage-form-group">
                             <label for="password">기존 비밀번호</label>
@@ -161,7 +161,7 @@ $users = $GLOBALS['users'];
                                     </td>
                                     <td>
                                         <div class="button-group">
-                                            <a href="../hotel/hotel-detail.php?id=<?= $hotel['hotel_id'] ?>" class="detail-btn">상세보기</a>
+                                            <a href="../hotel/hotel-detail.php?id=<?=htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8')?>" class="detail-btn">상세보기</a>
                                             <form method="get" action="../action/wishlist_delete.php" style="display:inline;">
                                                 <input type="hidden" name="hotel_id" value="<?= $hotel['hotel_id'] ?>">
                                                 <button type="submit" class="delete-btn"><i class="fas fa-trash"></i></button>
@@ -179,7 +179,7 @@ $users = $GLOBALS['users'];
             <section id="point" class="content-section">
                 <h2>포인트 관리</h2>
                 <div class="profile-form-container">
-                    <p><strong>현재 보유 포인트 :</strong> <?=number_format( $users['point']) ?> P</p>
+                    <p><strong>현재 보유 포인트 :</strong> <?=htmlspecialchars(number_format($users['point']), ENT_QUOTES, 'UTF-8')?> P</p>
                     <form action="../action/charge_point_action.php" method="get">
                         <div class="mypage-form-group">
                             <label for="charge_amount">충전할 포인트</label>

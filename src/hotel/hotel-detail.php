@@ -13,17 +13,17 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
         <div class="hotel-header">
             <div class="hotel-gallery">
                 <div class="main-image">
-                    <img src="<?php echo $hotel_main_image; ?>" alt="호텔 메인 이미지">
+                    <img src="<?php echo htmlspecialchars($hotel_main_image, ENT_QUOTES, 'UTF-8'); ?>" alt="호텔 메인 이미지">
                 </div>
                 <div class="thumbnail-images">
-                    <img src="<?php echo $hotel_detail_image_1; ?>" alt="호텔 이미지 1">
-                    <img src="<?php echo $hotel_detail_image_2; ?>" alt="호텔 이미지 2">
-                    <img src="<?php echo $hotel_detail_image_3; ?>" alt="호텔 이미지 3">
-                    <img src="<?php echo $hotel_detail_image_4; ?>" alt="호텔 이미지 4">
+                    <img src="<?php echo htmlspecialchars($hotel_detail_image_1, ENT_QUOTES, 'UTF-8'); ?>" alt="호텔 이미지 1">
+                    <img src="<?php echo htmlspecialchars($hotel_detail_image_2, ENT_QUOTES, 'UTF-8'); ?>" alt="호텔 이미지 2">
+                    <img src="<?php echo htmlspecialchars($hotel_detail_image_3, ENT_QUOTES, 'UTF-8'); ?>" alt="호텔 이미지 3">
+                    <img src="<?php echo htmlspecialchars($hotel_detail_image_4, ENT_QUOTES, 'UTF-8'); ?>" alt="호텔 이미지 4">
                 </div>
             </div>
             <div class="hotel-info">
-                <h1 class="hotel-name"><?php echo $hotel_name; ?></h1>
+                <h1 class="hotel-name"><?php echo htmlspecialchars($hotel_name, ENT_QUOTES, 'UTF-8'); ?></h1>
                 <div class="hotel-rating">
                     <div class="stars">
                         <?php
@@ -37,13 +37,13 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                                 echo '<i class="far fa-star"></i>';
                             }
                         ?>
-                        <span><?php echo $hotel_rating; ?></span>
+                        <span><?php echo htmlspecialchars($hotel_rating, ENT_QUOTES, 'UTF-8'); ?></span>
                     </div>
-                    <span class="review-count">(<?php echo $review_count; ?>개 후기)</span>
+                    <span class="review-count">(<?php echo htmlspecialchars($review_count, ENT_QUOTES, 'UTF-8'); ?>개 후기)</span>
                 </div>
                 <div class="hotel-location">
                     <i class="fas fa-map-marker-alt"></i>
-                    <?php echo $hotel_location; ?>
+                    <?php echo htmlspecialchars($hotel_location, ENT_QUOTES, 'UTF-8'); ?>
                 </div>
                 <div class="hotel-features">
                     <?php if ($hotel_facilities['pool']) : ?><span class="feature">수영장</span><?php endif; ?>
@@ -60,7 +60,7 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
             <div class="main-content">
                 <section class="description">
                     <h2>호텔 소개</h2>
-                    <p><?php echo str_replace('.', '.<br>', $hotel_description); ?></p>
+                    <p><?php echo str_replace('.', '.<br>', htmlspecialchars($hotel_description, ENT_QUOTES, 'UTF-8')); ?></p>
                 </section>
 
                 <section class="facilities">
@@ -117,10 +117,10 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                     <div class="room-grid">
                         <?php foreach ($hotel_rooms_deluxe as $deluxe) : ?>
                         <div class="room-card">
-                            <img src="<?php echo $deluxe['rooms_image']; ?>" alt="디럭스 룸">
+                            <img src="<?php echo htmlspecialchars($deluxe['rooms_image'], ENT_QUOTES, 'UTF-8'); ?>" alt="디럭스 룸">
                             <div class="room-info">
                                 <h3>디럭스 룸</h3>
-                                <p>최대 <?php echo $deluxe['max_person']; ?>인 / 35㎡</p>
+                                <p>최대 <?php echo htmlspecialchars($deluxe['max_person'], ENT_QUOTES, 'UTF-8'); ?>인 / 35㎡</p>
                                 <ul class="room-features">
                                     <li><i class="fas fa-bed"></i> 킹 사이즈 베드</li>
                                     <li><i class="fas fa-wifi"></i> 무료 Wi-Fi</li>
@@ -129,12 +129,12 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                                 </ul>
                                 <?php if ($event_busan == 1 || $event_japan == 1) : ?>
                                 <div class="timedeal-price-info">
-                                    <span class="timedeal-original-price">₩<?= $deluxe['price'] ?></span>
-                                    <p class="timedeal-discount-price">₩<?= $deluxe_sale_price?>/박</p>
+                                    <span class="timedeal-original-price">₩<?= htmlspecialchars($deluxe['price'], ENT_QUOTES, 'UTF-8') ?></span>
+                                    <p class="timedeal-discount-price">₩<?= htmlspecialchars($deluxe_sale_price, ENT_QUOTES, 'UTF-8')?>/박</p>
                                 </div>
                                 <?php else : ?>
                                 <div class="room-price">
-                                    <span class="price">₩<?php echo $deluxe['price']; ?></span>
+                                    <span class="price">₩<?php echo htmlspecialchars($deluxe['price'], ENT_QUOTES, 'UTF-8'); ?></span>
                                     <span class="per-night">/ 박</span>
                                 </div>
                                 <?php endif; ?>
@@ -143,10 +143,10 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                         <?php endforeach; ?>
                         <?php foreach ($hotel_rooms_suite as $suite) : ?>
                         <div class="room-card">
-                            <img src="<?php echo $suite['rooms_image']; ?>" alt="스위트 룸">
+                            <img src="<?php echo htmlspecialchars($suite['rooms_image'], ENT_QUOTES, 'UTF-8'); ?>" alt="스위트 룸">
                             <div class="room-info">
                                 <h3>스위트 룸</h3>
-                                <p>최대 <?php echo $suite['max_person']; ?>인 / 65㎡</p>
+                                <p>최대 <?php echo htmlspecialchars($suite['max_person'], ENT_QUOTES, 'UTF-8'); ?>인 / 65㎡</p>
                                 <ul class="room-features">
                                     <li><i class="fas fa-bed"></i> 킹 사이즈 베드 + 소파베드</li>
                                     <li><i class="fas fa-wifi"></i> 무료 Wi-Fi</li>
@@ -155,12 +155,12 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                                 </ul>
                                 <?php if ($event_busan == 1 || $event_japan == 1) : ?>
                                 <div class="timedeal-price-info">
-                                    <span class="timedeal-original-price">₩<?= $suite['price'] ?></span>
-                                    <p class="timedeal-discount-price">₩<?= $suite_sale_price ?>/박</p>
+                                    <span class="timedeal-original-price">₩<?= htmlspecialchars($suite['price'], ENT_QUOTES, 'UTF-8') ?></span>
+                                    <p class="timedeal-discount-price">₩<?= htmlspecialchars($suite_sale_price, ENT_QUOTES, 'UTF-8') ?>/박</p>
                                 </div>
                                 <?php else : ?>
                                 <div class="room-price">
-                                    <span class="price">₩<?php echo $suite['price']; ?></span>
+                                    <span class="price">₩<?php echo htmlspecialchars($suite['price'], ENT_QUOTES, 'UTF-8'); ?></span>
                                     <span class="per-night">/ 박</span>
                                 </div>
                                 <?php endif; ?>
@@ -181,8 +181,8 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                         <div class="write-review">
                             <?php if (isset($_SESSION['user_id']) && $user_reservation_id !== null): ?>
                                 <form class="review-form" action="../action/review_action.php" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="hotel_id" value="<?php echo $hotel_id; ?>">
-                                    <input type="hidden" name="reservation_id" value="<?php echo $user_reservation_id; ?>">
+                                    <input type="hidden" name="hotel_id" value="<?php echo htmlspecialchars($hotel_id, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="reservation_id" value="<?php echo htmlspecialchars($user_reservation_id, ENT_QUOTES, 'UTF-8'); ?>">
                                     <div class="rating-input">
                                         <label>평점</label>
                                         <div class="star-rating">
@@ -234,9 +234,9 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                             <?php foreach ($reviews as $review) : ?>
                             <div class="review-card">
                                 <div class="reviewer-info">
-                                    <img src="<?php echo $review['profile_image'] ?>" alt="Reviewer">
+                                    <img src="<?php echo htmlspecialchars($review['profile_image'], ENT_QUOTES, 'UTF-8'); ?>" alt="Reviewer">
                                     <div class="reviewer-details">
-                                        <div class="reviewer-name"><?php echo $review['username']; ?></div>
+                                        <div class="reviewer-name"><?php echo htmlspecialchars($review['username'], ENT_QUOTES, 'UTF-8'); ?></div>
                                         <div class="review-rating">
                                             <div class="stars">
                                                 <?php
@@ -260,20 +260,20 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                                                         echo '<i class="far fa-star"></i>';
                                                     }
                                                 ?>
-                                                <span><?php echo number_format($review['rating'], 1); ?></span>
+                                                <span><?php echo number_format(htmlspecialchars($review['rating'], ENT_QUOTES, 'UTF-8'), 1); ?></span>
                                             </div>
-                                            <div class="review-date"><?php echo $review['created_at']; ?></div>
+                                            <div class="review-date"><?php echo htmlspecialchars($review['created_at'], ENT_QUOTES, 'UTF-8'); ?></div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="review-content">
-                                    <?php echo $review['content']; ?>
+                                    <?php echo htmlspecialchars($review['content'], ENT_QUOTES, 'UTF-8'); ?>
                                 </div>
 
                                 <?php if (!empty($review['image_url'])): ?>
                                 <div class="review-image">
-                                    <img src="/<?php echo ltrim($review['image_url'], '/'); ?>" alt="Review Image">
+                                    <img src="/<?php echo ltrim(htmlspecialchars($review['image_url'], ENT_QUOTES, 'UTF-8'), '/'); ?>" alt="Review Image">
                                 </div>
                                 <?php endif; ?>
 
@@ -291,14 +291,14 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                                         ?>
                                     </div>
                                     <div class="detail-review-actions">
-                                        <a href="../action/review_action.php?review_id=<?php echo $review['review_id']; ?>&action=helpful&hotel_id=<?php echo $hotel_id; ?>" class="action-btn">
-                                            <i class="far fa-thumbs-up"></i>도움이 됨<span class="count">(<?php echo $review['count_is_helpful']; ?>)</span>
+                                        <a href="../action/review_action.php?review_id=<?php echo htmlspecialchars($review['review_id'], ENT_QUOTES, 'UTF-8'); ?>&action=helpful&hotel_id=<?php echo htmlspecialchars($hotel_id, ENT_QUOTES, 'UTF-8'); ?>" class="action-btn">
+                                            <i class="far fa-thumbs-up"></i>도움이 됨<span class="count">(<?php echo htmlspecialchars($review['count_is_helpful'], ENT_QUOTES, 'UTF-8'); ?>)</span>
                                         </a>
-                                        <a href="../action/review_action.php?review_id=<?php echo $review['review_id']; ?>&action=not_helpful&hotel_id=<?php echo $hotel_id; ?>" class="action-btn">
-                                            <i class="far fa-thumbs-down"></i>도움이 되지 않음<span class="count">(<?php echo $review['count_is_not_helpful']; ?>)</span>
+                                        <a href="../action/review_action.php?review_id=<?php echo htmlspecialchars($review['review_id'], ENT_QUOTES, 'UTF-8'); ?>&action=not_helpful&hotel_id=<?php echo htmlspecialchars($hotel_id, ENT_QUOTES, 'UTF-8'); ?>" class="action-btn">
+                                            <i class="far fa-thumbs-down"></i>도움이 되지 않음<span class="count">(<?php echo htmlspecialchars($review['count_is_not_helpful'], ENT_QUOTES, 'UTF-8'); ?>)</span>
                                         </a>
                                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $review['user_id']) : ?>
-                                        <a href="../action/review_action.php?action=delete&review_id=<?php echo $review['review_id']; ?>&hotel_id=<?php echo $hotel_id; ?>"
+                                        <a href="../action/review_action.php?action=delete&review_id=<?php echo htmlspecialchars($review['review_id'], ENT_QUOTES, 'UTF-8'); ?>&hotel_id=<?php echo htmlspecialchars($hotel_id, ENT_QUOTES, 'UTF-8'); ?>"
                                         class="action-btn"
                                         onclick="return confirm('정말 삭제하시겠습니까?');">
                                         🗑 삭제
@@ -325,15 +325,15 @@ $room_type = $_GET['room_type'] ?? 'deluxe';
                         <input type="hidden" name="id" id="id" value="<?= $hotel_id ?>">
                         <div class="booking-form-group">
                             <label for="check-in">체크인</label>
-                            <input type="date" id="check-in" name="checkin" value="<?= isset($_GET['checkin']) ? $_GET['checkin'] : '' ?>" min="<?= $today ?>" required>
+                            <input type="date" id="check-in" name="checkin" value="<?= isset($_GET['checkin']) ? htmlspecialchars($_GET['checkin'], ENT_QUOTES, 'UTF-8') : '' ?>" min="<?= $today ?>" required>
                         </div>
                         <div class="booking-form-group">
                             <label for="check-out">체크아웃</label>
-                            <input type="date" id="check-out" name="checkout" value="<?= isset($_GET['checkout']) ? $_GET['checkout'] : '' ?>" min="<?= $today ?>" required>
+                            <input type="date" id="check-out" name="checkout" value="<?= isset($_GET['checkout']) ? htmlspecialchars($_GET['checkout'], ENT_QUOTES, 'UTF-8') : '' ?>" min="<?= $today ?>" required>
                         </div>
                         <div class="booking-form-group">
                             <label for="guests">인원</label>
-                            <input type="number" id="guests" name="guests" value="<?= isset($_GET['guests']) ? (int)$_GET['guests'] : 1 ?>" min="1" max="4" required>
+                            <input type="number" id="guests" name="guests" value="<?= isset($_GET['guests']) ? (int)htmlspecialchars($_GET['guests'], ENT_QUOTES, 'UTF-8') : 1 ?>" min="1" max="4" required>
                         </div>
                         <div class="booking-form-group">
                             <label for="room-type">객실 타입</label>

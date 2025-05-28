@@ -1,11 +1,12 @@
 <?php
+include_once __DIR__ . '/../action/admin_access.php';
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/hotel_edit_info.php';
 ?>
 
 <main class="admin-hotel-add-container">
     <form action="../action/hotel_edit_action.php" method="POST" enctype="multipart/form-data" class="hotel-add-admin-form">
-        <input type="hidden" name="hotel_id" value="<?php echo $hotel_id; ?>">
+        <input type="hidden" name="hotel_id" value="<?php echo htmlspecialchars($hotel_id, ENT_QUOTES, 'UTF-8'); ?>">
         <div class="hotel-add-admin-header">
             <a href="admin.php?tab=hotels" class="hotel-add-admin-back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>
             <h1 class="hotel-add-admin-title">호텔 수정</h1>
@@ -20,19 +21,19 @@ include_once __DIR__ . '/../includes/hotel_edit_info.php';
                     <div class="room-info-grid">
                         <div class="room-info-item">
                             <label for="name">호텔 이름</label>
-                            <input type="text" id="name" name="name" value="<?php echo $hotel_name; ?>" required>
+                            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($hotel_name, ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                         <div class="room-info-item">
                             <label for="location">위치</label>
-                            <input type="text" id="location" name="location" value="<?php echo $hotel_location; ?>" required>
+                            <input type="text" id="location" name="location" value="<?php echo htmlspecialchars($hotel_location, ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                         <div class="room-info-item">
                             <label for="description">설명</label>
-                            <textarea id="description" name="description" rows="5" required><?php echo $hotel_description; ?></textarea>
+                            <textarea id="description" name="description" rows="5" required><?php echo htmlspecialchars($hotel_description, ENT_QUOTES, 'UTF-8'); ?></textarea>
                         </div>
                         <div class="room-info-item">
                             <label for="price_per_night">1박 가격</label>
-                            <input type="number" id="price_per_night" name="price_per_night" min="0" value="<?php echo $hotel_price_per_night; ?>" required>
+                            <input type="number" id="price_per_night" name="price_per_night" min="0" value="<?php echo htmlspecialchars($hotel_price_per_night, ENT_QUOTES, 'UTF-8'); ?>" required>
                         </div>
                     </div>
                 </div>
@@ -42,22 +43,22 @@ include_once __DIR__ . '/../includes/hotel_edit_info.php';
                     <div class="room-info-grid">
                         <div class="hotel-add-admin-checkbox-group">
                             <label>
-                                <input type="checkbox" name="facilities[]" value="pool" <?php echo $hotel_facilities['pool'] ? 'checked' : ''; ?>> 수영장
+                                <input type="checkbox" name="facilities[]" value="pool" <?php echo htmlspecialchars($hotel_facilities['pool'], ENT_QUOTES, 'UTF-8') && $hotel_facilities['pool'] ? 'checked' : ''; ?>> 수영장
                             </label>
                             <label>
-                                <input type="checkbox" name="facilities[]" value="spa" <?php echo $hotel_facilities['spa'] ? 'checked' : ''; ?>> 스파
+                                <input type="checkbox" name="facilities[]" value="spa" <?php echo htmlspecialchars($hotel_facilities['spa'], ENT_QUOTES, 'UTF-8') && $hotel_facilities['spa'] ? 'checked' : ''; ?>> 스파
                             </label>
                             <label>
-                                <input type="checkbox" name="facilities[]" value="fitness" <?php echo $hotel_facilities['fitness'] ? 'checked' : ''; ?>> 피트니스
+                                <input type="checkbox" name="facilities[]" value="fitness" <?php echo htmlspecialchars($hotel_facilities['fitness'], ENT_QUOTES, 'UTF-8') ? 'checked' : ''; ?>> 피트니스
                             </label>
                             <label>
-                                <input type="checkbox" name="facilities[]" value="restaurant" <?php echo $hotel_facilities['restaurant'] ? 'checked' : ''; ?>> 레스토랑
+                                <input type="checkbox" name="facilities[]" value="restaurant" <?php echo htmlspecialchars($hotel_facilities['restaurant'], ENT_QUOTES, 'UTF-8') ? 'checked' : ''; ?>> 레스토랑
                             </label>
                             <label>
-                                <input type="checkbox" name="facilities[]" value="parking" <?php echo $hotel_facilities['parking'] ? 'checked' : ''; ?>> 주차장
+                                <input type="checkbox" name="facilities[]" value="parking" <?php echo htmlspecialchars($hotel_facilities['parking'], ENT_QUOTES, 'UTF-8') ? 'checked' : ''; ?>> 주차장
                             </label>
                             <label>
-                                <input type="checkbox" name="facilities[]" value="wifi" <?php echo $hotel_facilities['wifi'] ? 'checked' : ''; ?>> 와이파이
+                                <input type="checkbox" name="facilities[]" value="wifi" <?php echo htmlspecialchars($hotel_facilities['wifi'], ENT_QUOTES, 'UTF-8') ? 'checked' : ''; ?>> 와이파이
                             </label>
                         </div>
                     </div>

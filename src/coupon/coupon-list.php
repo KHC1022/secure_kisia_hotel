@@ -17,17 +17,17 @@ include_once __DIR__ . '/../includes/coupon_info.php';
                 <div class="coupon-details">
                     <div class="coupon-header">
                         <i class="fas fa-ticket-alt"></i> 
-                        <?= $coupon['name'] ?> (<?= $coupon['code'] ?>)
+                        <?= htmlspecialchars($coupon['name'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>)
                     </div>
                     <p style="color:red; font-weight:bold;">
                         <?= $coupon['discount_type'] === 'percentage'
-                            ? (int)$coupon['discount_value'] . '% 할인'
-                            : number_format($coupon['discount_value']) . '원 할인'; ?>
+                            ? (int)htmlspecialchars($coupon['discount_value'], ENT_QUOTES, 'UTF-8') . '% 할인'
+                            : number_format(htmlspecialchars($coupon['discount_value'], ENT_QUOTES, 'UTF-8')) . '원 할인'; ?>
                         <?php if ($is_used): ?>
                             <span style="color:red; font-weight:bold;">[사용 완료]</span>
                         <?php endif; ?>
                     </p>
-                    <p>사용 기간: <?= $coupon['start_date'] ?> ~ <?= $coupon['end_date'] ?></p>
+                    <p>사용 기간: <?= htmlspecialchars($coupon['start_date'], ENT_QUOTES, 'UTF-8') ?> ~ <?= htmlspecialchars($coupon['end_date'], ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
                 <div class="coupon-action">
                     <?php 
@@ -50,7 +50,7 @@ include_once __DIR__ . '/../includes/coupon_info.php';
                     else:
                     ?>
                         <form action="receive_coupon_action.php" method="GET">
-                            <input type="hidden" name="coupon_id" value="<?= $coupon['coupon_id'] ?>">
+                            <input type="hidden" name="coupon_id" value="<?= htmlspecialchars($coupon['coupon_id'], ENT_QUOTES, 'UTF-8') ?>">
                             <button type="submit"><i class="fas fa-gift"></i></button>
                         </form>
                     <?php endif; ?>

@@ -1,6 +1,7 @@
 <?php 
+include_once __DIR__ . '/../action/admin_access.php';
 include_once __DIR__ . '/../includes/header.php'; 
-include_once __DIR__ . '/../action/inquiry_detail_action.php'; // $inquiry, $response, $files 포함
+include_once __DIR__ . '/../action/inquiry_detail_action.php';
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -17,15 +18,15 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php'; // $inquiry, $res
             <a href="inquiry.php" class="inquiry-back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>
         </div>
         <div class="inquiry-header">
-            <h2 class="inquiry-title"><?= $inquiry['title'] ?></h2>
+            <h2 class="inquiry-title"><?= htmlspecialchars($inquiry['title'], ENT_QUOTES, 'UTF-8') ?></h2>
             <div class="inquiry-meta">
-                <span class="writer">작성자: <?= $inquiry['username'] ?></span>
-                <span class="date">작성일: <?= date('Y-m-d H:i', strtotime($inquiry['created_at'])) ?></span>
+                <span class="writer">작성자: <?= htmlspecialchars($inquiry['username'], ENT_QUOTES, 'UTF-8') ?></span>
+                <span class="date">작성일: <?= htmlspecialchars(date('Y-m-d H:i', strtotime($inquiry['created_at'])), ENT_QUOTES, 'UTF-8') ?></span>
             </div>
         </div>
 
         <div class="inquiry-content">
-            <p><?= nl2br($inquiry['content']) ?></p>
+            <p><?= nl2br(htmlspecialchars($inquiry['content'], ENT_QUOTES, 'UTF-8')) ?></p>
         </div>
 
         <?php if (!empty($files)): ?>
@@ -33,8 +34,8 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php'; // $inquiry, $res
                 <h3>📎 첨부 파일</h3>
                 <div class="file-list">
                     <?php foreach ($files as $file): ?>
-                        <a href="../<?= $file['file_path'] ?>" class="file-item" download>
-                            <i class="fas fa-file-alt"></i> <?= $file['file_name'] ?>
+                        <a href="../<?= htmlspecialchars($file['file_path'], ENT_QUOTES, 'UTF-8') ?>" class="file-item" download>
+                            <i class="fas fa-file-alt"></i> <?= htmlspecialchars($file['file_name'], ENT_QUOTES, 'UTF-8') ?>
                         </a>
                     <?php endforeach; ?>
                 </div>
@@ -45,10 +46,10 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php'; // $inquiry, $res
         <div class="admin-answer-form">
             <h2>답변 수정</h2>
             <form action="../action/inquiry_response_edit_action.php" method="get">
-                <input type="hidden" name="inquiry_id" value="<?= $inquiry['inquiry_id'] ?>">
-                <textarea name="content" rows="6" style="width:100%;" required><?= $response['content'] ?></textarea>
+                <input type="hidden" name="inquiry_id" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>">
+                <textarea name="content" rows="6" style="width:100%;" required><?= htmlspecialchars($response['content'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <div style="margin-top: 0.5rem; text-align: right;">
-                    <button type="submit" class="edit-btn">수정 완료</button>
+                    <button type="submit" class="inquiry-write-btn">수정 완료</button>
                 </div>
             </form>
         </div>

@@ -1,9 +1,17 @@
-<!-- /404.php -->
+<?php
+include_once __DIR__ . '/../includes/session.php';
+function customErrorHandler($errno, $errstr, $errfile, $errline) {
+    error_log("Error [$errno] $errstr on line $errline in file $errfile");
+    return true;
+}
+
+// 에러 페이지 HTML은 그대로 유지
+?>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>404 - 페이지를 찾을 수 없습니다</title>
+    <title>페이지를 찾을 수 없습니다</title>
     <style>
         body {
             background-color: #f8f8f8;
@@ -39,7 +47,11 @@
     <div class="error-container">
         <div class="error-code">404</div>
         <div class="error-message">요청하신 페이지를 찾을 수 없습니다.</div>
-        <a class="home-link" href="/">홈으로 돌아가기</a>
+        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
+            <a class="home-link" href="/admin/admin.php">관리자 페이지로 돌아가기</a>
+        <?php else: ?>
+            <a class="home-link" href="/">홈으로 돌아가기</a>
+        <?php endif; ?>
     </div>
 </body>
 </html>

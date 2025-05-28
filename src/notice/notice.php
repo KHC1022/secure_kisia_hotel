@@ -22,9 +22,9 @@ include_once __DIR__ . '/../includes/notice_info.php';
             <form method="get" action="notice.php" class="sort-form">
                 <span class="sort-label">정렬:</span>
                 <select name="sort" class="sort-select" onchange="this.form.submit()">
-                    <option value="none" <?= isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '' ?>>정렬 순서</option>
-                    <option value="recent" <?= isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '' ?>>최신순</option>
-                    <option value="old" <?= isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '' ?>>오래된순</option>
+                    <option value="none" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'none' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>정렬 순서</option>
+                    <option value="recent" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'recent' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>최신순</option>
+                    <option value="old" <?= htmlspecialchars(isset($_GET['sort']) && $_GET['sort'] === 'old' ? 'selected' : '', ENT_QUOTES, 'UTF-8') ?>>오래된순</option>
                 </select>
                 <?php if (!empty($search)): ?>
                     <input type="hidden" name="search" value="<?= $search ?>">
@@ -51,14 +51,14 @@ include_once __DIR__ . '/../includes/notice_info.php';
                 foreach ($notice_list as $notice): 
                 ?>
                     <tr>
-                        <td><?= $start_num++ ?></td>
+                        <td><?= htmlspecialchars($start_num++, ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
-                            <a href="../notice/notice-detail.php?notice_id=<?= $notice['notice_id'] ?>">
-                                <?= $notice['title'] ?>
+                            <a href="../notice/notice-detail.php?notice_id=<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>">
+                                <?= htmlspecialchars($notice['title'], ENT_QUOTES, 'UTF-8') ?>
                             </a>
                         </td>
-                        <td><?= $notice['username'] ?></td>
-                        <td><?= date('Y-m-d', strtotime($notice['created_at'])) ?></td>
+                        <td><?= htmlspecialchars($notice['username'], ENT_QUOTES, 'UTF-8') ?></td>
+                        <td><?= htmlspecialchars(date('Y-m-d', strtotime($notice['created_at'])), ENT_QUOTES, 'UTF-8') ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
