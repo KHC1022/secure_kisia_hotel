@@ -5,7 +5,8 @@ include_once __DIR__ . '/../includes/notice_edit_info.php';
 ?>
 
 <main class="admin-hotel-add-container">
-    <form action="../action/notice_edit_action.php" method="get" class="hotel-add-admin-form">
+    <form action="../action/notice_edit_action.php" method="post" class="hotel-add-admin-form">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="notice_id" value="<?php echo htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8'); ?>">
         <div class="hotel-add-admin-header">
             <a href="admin.php?tab=notices" class="hotel-add-admin-back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>

@@ -2,12 +2,7 @@
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/mypage_action.php';  // VIP 관련 함수
-
-// 세션 확인
-if (!isset($_SESSION['user_id'])) {
-    echo "<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>";
-    exit;
-}
+include_once __DIR__ . '/../action/login_check.php';
 
 $user_id = $_SESSION['user_id'];
 $charge_amount = isset($_POST['charge_amount']) ? floatval($_POST['charge_amount']) : 0;

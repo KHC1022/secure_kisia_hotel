@@ -5,7 +5,7 @@ include_once __DIR__ . '/../includes/coupon_edit_info.php';
 ?>
 
 <main class="admin-hotel-add-container">
-    <form action="../action/coupon_edit_action.php" method="GET" class="hotel-add-admin-form">
+    <form action="../action/coupon_edit_action.php" method="post" class="hotel-add-admin-form">
         <div class="hotel-add-admin-header">
             <a href="admin.php?tab=coupons" class="hotel-add-admin-back-btn"><i class="fas fa-arrow-left"></i> 목록으로 돌아가기</a>
             <h1 class="hotel-add-admin-title">쿠폰 수정</h1>

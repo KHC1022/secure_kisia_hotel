@@ -12,8 +12,8 @@ if ($inquiry_id < 1 || !$category || !$title || !$content) {
     exit;
 }
 
-// ✅ 게시글 수정
-$stmt = $conn->prepare("UPDATE inquiries SET category = ?, title = ?, content = ? WHERE inquiry_id = ?");
+// 게시글 수정
+$stmt = $conn->prepare("UPDATE inquiries SET category = ?, title = ?, content = ?, created_at = NOW() WHERE inquiry_id = ?");
 $stmt->bind_param("sssi", $category, $title, $content, $inquiry_id);
 $update_result = $stmt->execute();
 
@@ -22,7 +22,7 @@ if (!$update_result) {
     exit;
 }
 
-// ✅ 파일 업로드 처리
+// 파일 업로드 처리
 if (isset($_FILES['files']) && is_array($_FILES['files']['name']) && $_FILES['files']['name'][0] !== '') {
     $allowed_ext = ['jpg', 'jpeg', 'png', 'pdf', 'txt', 'zip', 'docx'];
     $allowed_mime = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain', 'application/zip', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];

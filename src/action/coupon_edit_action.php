@@ -2,24 +2,32 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+// 관리자가 아닌 경우 CSRF 토큰 검증
+if (!isset($_SESSION['is_admin'])) {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+        echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+        exit;
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     exit('허용되지 않은 요청 방식입니다.');
 }
 
-// ✅ 입력값 필터링
-$code = trim($_GET['code'] ?? '');
-$name = trim($_GET['name'] ?? '');
-$discount_type = trim($_GET['discount_type'] ?? '');
-$discount_value = (int)($_GET['discount_value'] ?? 0);
-$start_date = trim($_GET['start_date'] ?? '');
-$end_date = trim($_GET['end_date'] ?? '');
-$minimum_purchase = (int)($_GET['minimum_purchase'] ?? 0);
-$maximum_discount = isset($_GET['maximum_discount']) ? (int)$_GET['maximum_discount'] : null;
-$usage_limit = isset($_GET['usage_limit']) ? (int)$_GET['usage_limit'] : null;
-$is_active = isset($_GET['is_active']) ? 1 : 0;
+// 입력값 필터링
+$code = trim($_POST['code'] ?? '');
+$name = trim($_POST['name'] ?? '');
+$discount_type = trim($_POST['discount_type'] ?? '');
+$discount_value = (int)($_POST['discount_value'] ?? 0);
+$start_date = trim($_POST['start_date'] ?? '');
+$end_date = trim($_POST['end_date'] ?? '');
+$minimum_purchase = (int)($_POST['minimum_purchase'] ?? 0);
+$maximum_discount = isset($_POST['maximum_discount']) ? (int)$_POST['maximum_discount'] : null;
+$usage_limit = isset($_POST['usage_limit']) ? (int)$_POST['usage_limit'] : null;
+$is_active = isset($_POST['is_active']) ? 1 : 0;
 
-// ✅ 할인 유형 및 날짜 유효성 검사
+// 할인 유형 및 날짜 유효성 검사
 if (!in_array($discount_type, ['percentage', 'fixed'])) {
     echo "<script>alert('유효하지 않은 할인 유형입니다.'); history.back();</script>";
     exit;
@@ -33,7 +41,7 @@ if (strtotime($start_date) === false || strtotime($end_date) === false || $start
     exit;
 }
 
-// ✅ 쿠폰 존재 여부 확인 (Prepared Statement)
+// 쿠폰 존재 여부 확인
 $check_stmt = $conn->prepare("SELECT 1 FROM coupons WHERE code = ?");
 $check_stmt->bind_param("s", $code);
 $check_stmt->execute();
@@ -43,7 +51,7 @@ if ($check_stmt->num_rows === 0) {
     exit;
 }
 
-// ✅ 쿠폰 수정 처리
+// 쿠폰 수정 처리
 $stmt = $conn->prepare("
     UPDATE coupons SET 
         name = ?, 

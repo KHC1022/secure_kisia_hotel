@@ -3,12 +3,12 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
 // 쿠폰 ID 확인 및 필터링
-if (!isset($_GET['coupon_edit']) || empty($_GET['coupon_edit'])) {
+if (!isset($_POST['coupon_edit']) || empty($_POST['coupon_edit'])) {
     header("Location: ../admin/admin.php?tab=coupons");
     exit;
 }
 
-$code = $_GET['coupon_edit'];
+$code = $_POST['coupon_edit'];
 
 // 쿠폰 정보 조회 (Prepared Statement 사용)
 $sql = "SELECT * FROM coupons WHERE code = ?";

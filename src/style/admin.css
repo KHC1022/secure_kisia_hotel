@@ -673,7 +673,6 @@
     padding: 0 !important;
 }
 
-/* ✅ 모든 action 버튼 크기 통일 */
 .action-btn {
     width: 28px !important;
     height: 28px !important;
@@ -683,7 +682,7 @@
     display: inline-block;
     margin: 0;
 }
-/* VIP 라벨 스타일 개선 */
+
 .admin-table .grade-label {
     background-color: #edf2f7;
     border: 1px solid #cbd5e0;
@@ -715,7 +714,7 @@
     justify-content: center;
     margin: 0 2px !important;
 }
-/* ✅ 관리자 전용 스타일 */
+
 .admin-table .grade-label.admin {
     background-color: #e6fffa;
     border: 1px solid #38b2ac;

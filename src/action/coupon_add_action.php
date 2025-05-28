@@ -2,19 +2,27 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
+// 관리자가 아닌 경우 CSRF 토큰 검증
+if (!isset($_SESSION['is_admin'])) {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+        echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+        exit;
+    }
+}
+
 if (function_exists('customErrorHandler')) {
     set_error_handler('customErrorHandler');
 }
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-    // ✅ GET 방식 제한
+    // GET 방식 제한
     if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
         http_response_code(405);
         exit('허용되지 않은 요청 방식입니다.');
     }
 
-    // ✅ 필수 입력값 필터링 및 검증
+    // 필수 입력값 필터링 및 검증
     $required_fields = ['code', 'name', 'discount_type', 'discount_value', 'start_date', 'end_date', 'minimum_purchase'];
     foreach ($required_fields as $field) {
         if (!isset($_GET[$field]) || trim($_GET[$field]) === '') {
@@ -22,7 +30,7 @@ try {
         }
     }
 
-    // ✅ 입력값 정리 및 타입 안전화
+    // 입력값 정리 및 타입 안전화
     $code = trim($_GET['code']);
     $name = trim($_GET['name']);
     $discount_type = $_GET['discount_type'];
@@ -34,7 +42,7 @@ try {
     $usage_limit = isset($_GET['usage_limit']) ? (int)$_GET['usage_limit'] : null;
     $is_active = isset($_GET['is_active']) ? 1 : 0;
 
-    // ✅ 할인 유형과 값 검증
+    // 할인 유형과 값 검증
     if (!in_array($discount_type, ['percentage', 'fixed'])) {
         throw new Exception("할인 유형이 유효하지 않습니다.");
     }
@@ -42,7 +50,7 @@ try {
         throw new Exception("퍼센트 할인 값은 1~100 사이여야 합니다.");
     }
 
-    // ✅ 날짜 유효성 검사
+    // 날짜 유효성 검사
     if (strtotime($start_date) === false || strtotime($end_date) === false) {
         throw new Exception("날짜 형식이 잘못되었습니다.");
     }
@@ -50,7 +58,7 @@ try {
         throw new Exception("종료일은 시작일 이후여야 합니다.");
     }
 
-    // ✅ 쿠폰 코드 중복 확인
+    // 쿠폰 코드 중복 확인
     $check_stmt = $conn->prepare("SELECT 1 FROM coupons WHERE code = ?");
     $check_stmt->bind_param("s", $code);
     $check_stmt->execute();
@@ -59,7 +67,7 @@ try {
         throw new Exception("이미 존재하는 쿠폰 코드입니다.");
     }
 
-    // ✅ 쿠폰 삽입
+    // 쿠폰 삽입
     $stmt = $conn->prepare("
         INSERT INTO coupons 
         (code, name, discount_type, discount_value, start_date, end_date, minimum_purchase, maximum_discount, usage_limit, is_active, created_at)

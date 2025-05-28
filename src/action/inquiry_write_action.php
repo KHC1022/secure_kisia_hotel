@@ -1,15 +1,11 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
+include_once __DIR__ . '/../action/login_check.php';
 
-// ✅ CSRF 토큰 검증
+// CSRF 토큰 검증
 if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
     die("<script>alert('잘못된 접근입니다.'); history.back();</script>");
-}
-
-// ✅ 사용자 인증 여부 확인
-if (!isset($_SESSION['user_id'])) {
-    die("<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>");
 }
 
 $user_id = $_SESSION['user_id'];
@@ -24,7 +20,7 @@ if (!$category || !$title || !$content) {
     exit;
 }
 
-// ✅ 파일 유효성 검사 (확장자 및 MIME)
+// 파일 유효성 검사 (확장자 및 MIME)
 $upload_dir = __DIR__ . '/../uploads/';
 if (!is_dir($upload_dir)) {
     mkdir($upload_dir, 0755, true);
@@ -56,14 +52,14 @@ if (!empty($_FILES['files']['name'][0])) {
     }
 }
 
-// ✅ 글 등록
+// 글 등록
 $stmt = $conn->prepare("INSERT INTO inquiries (user_id, category, title, content, is_secret) VALUES (?, ?, ?, ?, ?)");
 $stmt->bind_param("isssi", $user_id, $category, $title, $content, $is_secret);
 $stmt->execute();
 $inquiry_id = $stmt->insert_id;
 $stmt->close();
 
-// ✅ 파일 저장 및 DB 등록
+// 파일 저장 및 DB 등록
 foreach ($files_to_upload as $file) {
     if (move_uploaded_file($file['tmp_name'], $file['target_path'])) {
         $file_stmt = $conn->prepare("INSERT INTO inquiry_files (inquiry_id, file_name, file_path) VALUES (?, ?, ?)");

@@ -104,12 +104,14 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                                     <?php if($user['vip'] == 1): ?>
                                                         <!-- VIP → 일반 회원 -->
                                                         <input type="hidden" name="vip_status" value="0">
+                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                         <button type="submit" class="action-btn vip-toggle" title="일반 사용자로 변경">
                                                             <i class="fas fa-user"></i>
                                                         </button>
                                                     <?php else: ?>
                                                         <!-- 일반 회원 → VIP -->
                                                         <input type="hidden" name="vip_status" value="1">
+                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                         <button type="submit" class="action-btn vip-toggle" title="VIP로 변경">
                                                             <i class="fas fa-crown"></i>
                                                         </button>
@@ -120,6 +122,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <!-- 회원 삭제 -->
                                              <?php if($user['is_admin'] != 1): ?>
                                             <form method="post" action="../action/admin_delete_action.php" style="display:inline;">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="user_delete" class="action-btn delete" value="<?= htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -182,10 +185,12 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         <td style="padding-left: 40px;"><?= htmlspecialchars($hotel['room_count'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td style="padding-left: 40px;"><?= htmlspecialchars($hotel['available_room_count'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
-                                            <form method="get" action="../admin/hotel-edit.php">
+                                            <form method="post" action="../admin/hotel-edit.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="hotel_id" class="action-btn edit" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="post" action="../action/admin_delete_action.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="hotel_delete" class="action-btn delete" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
@@ -261,6 +266,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td>
                                             <form method="post" action="../action/admin_delete_action.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <input type="hidden" name="room_id" value="<?= htmlspecialchars($reservation['room_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                 <button name="reservation_delete" class="action-btn delete" value="<?= htmlspecialchars($reservation['reservation_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
@@ -321,6 +327,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         <td><?= htmlspecialchars($review['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
                                             <form method="post" action="../action/admin_delete_action.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <a href="../hotel/hotel-detail.php?id=<?= htmlspecialchars($review['hotel_id'], ENT_QUOTES, 'UTF-8') ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
                                                 <button name="review_delete" class="action-btn delete" value="<?= htmlspecialchars($review['review_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
@@ -409,6 +416,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         </td>
                                         <td>
                                             <form method="post" action="../action/admin_delete_action.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <a href="../inquiry/inquiry_detail.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
                                                 <button name="inquiry_delete" class="action-btn delete" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
@@ -473,10 +481,12 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <form method="get" action="../admin/notice-edit.php">
+                                            <form method="post" action="../admin/notice-edit.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="notice_edit" class="action-btn edit" value="<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="post" action="../action/admin_delete_action.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="notice_delete" class="action-btn delete" value="<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
@@ -584,10 +594,12 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <?php endif; ?>
                                         </td>
                                         <td style="text-align: center;">
-                                            <form method="get" action="../admin/coupon-edit.php">
+                                            <form method="post" action="../admin/coupon-edit.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="coupon_edit" class="action-btn edit" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
                                             <form method="post" action="../action/admin_delete_action.php">
+                                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <button name="coupon_delete" class="action-btn delete" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>

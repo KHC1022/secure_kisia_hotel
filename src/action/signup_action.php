@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . '/../includes/db_connection.php';
-session_start(); // CSRF 토큰 등을 사용할 경우 필요
+include_once __DIR__ . '/../includes/session.php';
 
 // POST 방식으로 수신 및 이스케이프
 $name = trim($_POST['username'] ?? '');

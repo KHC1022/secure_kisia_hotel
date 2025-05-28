@@ -2,12 +2,7 @@
 include_once __DIR__ . '/../action/payment_action.php';
 include_once __DIR__ . '/../action/coupon_view_action.php'; 
 include_once __DIR__ . '/../includes/header.php';
-
-// 사용자 인증 확인
-if (!isset($_SESSION['user_id'])) {
-    echo "<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>";
-    exit;
-}
+include_once __DIR__ . '/../action/login_check.php';
 
 // 필수 예약 정보 검증
 $required_vars = ['hotel', 'checkin', 'checkout', 'room_type', 'guests', 'days', 'room_fee', 'tax', 'total_price', 'users'];

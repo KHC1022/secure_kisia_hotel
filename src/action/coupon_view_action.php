@@ -1,10 +1,7 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
-
-if (!isset($_SESSION['user_id'])) {
-    die("<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>");
-}
+include_once __DIR__ . '/../action/login_check.php';
 
 $user_id = $_SESSION['user_id'];
 $available_coupons = [];
