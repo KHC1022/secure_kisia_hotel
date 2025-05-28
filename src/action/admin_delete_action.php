@@ -6,7 +6,7 @@ $action_type = null;
 $table_name = null;
 $id_name = null;
 
-foreach ($_GET as $key => $value) {
+foreach ($_POST as $key => $value) {
     if (strpos($key, '_') !== false) {
         list($prefix, $action) = explode('_', $key);
 
