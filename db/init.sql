@@ -6,19 +6,20 @@ USE kisia_hotel;
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
-    real_id VARCHAR(50) NOT NULL,
+    real_id VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     phone VARCHAR(20),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_admin BOOLEAN DEFAULT FALSE,
     terms BOOLEAN DEFAULT FALSE,
     marketing BOOLEAN DEFAULT FALSE,
     profile_image VARCHAR(255) DEFAULT '/image/default_profile.jpg',
-    point INT,
+    point INT DEFAULT 0,
     vip BOOLEAN DEFAULT FALSE,
     vip_status ENUM('auto', 'manual') DEFAULT 'auto'
 );
+
 
 -- 2. hotels (호텔 정보)
 CREATE TABLE hotels (
@@ -217,33 +218,33 @@ SET NAMES utf8mb4;
 
 -- 사용자 계정 추가
 INSERT INTO users (username, real_id, password, email, phone, created_at, is_admin, terms, marketing) VALUES 
-('관리자', 'admin', 'admin', 'admin@naver.com', '010-1234-1234', '2024-01-01 00:00:00', 1, 1, 0),
-('김서연', 'kimsy', 'kimsy123', 'kimsy@naver.com', '010-1111-2222', '2024-01-02 10:30:00', 0, 1, 0),
-('이준호', 'leejh', 'leejh456', 'leejh@naver.com', '010-1111-3333', '2024-01-03 14:15:00', 0, 1, 0),
-('박지민', 'parkjm', 'parkjm789', 'parkjm@naver.com', '010-1111-4444', '2024-01-04 09:45:00', 0, 1, 0),
-('최민준', 'choimj', 'choimj101', 'choimj@naver.com', '010-1111-5555', '2024-01-05 16:20:00', 0, 1, 0),
-('정서아', 'jeongsa', 'jeongsa202', 'jeongsa@naver.com', '010-1111-6666', '2024-01-06 11:10:00', 0, 1, 0),
-('황도현', 'hwangdh', 'hwangdh303', 'hwangdh@naver.com', '010-1111-7777', '2024-01-07 13:25:00', 0, 1, 0),
-('강수아', 'kangsa', 'kangsa404', 'kangsa@naver.com', '010-1111-8888', '2024-01-08 15:40:00', 0, 1, 0),
-('조민서', 'joms', 'joms505', 'joms@naver.com', '010-1111-9999', '2024-01-09 10:55:00', 0, 1, 0),
-('윤지우', 'yoonjw', 'yoonjw606', 'yoonjw@naver.com', '010-1111-0000', '2024-01-10 14:30:00', 0, 1, 0),
-('장하준', 'janghj', 'janghj707', 'janghj@naver.com', '010-2222-1111', '2024-01-11 09:15:00', 0, 1, 0),
-('임서준', 'limsj', 'limsj808', 'limsj@naver.com', '010-2222-2222', '2024-01-12 16:45:00', 0, 1, 0),
-('한지안', 'hanja', 'hanja909', 'hanja@naver.com', '010-2222-3333', '2024-01-13 11:20:00', 0, 1, 0),
-('신하윤', 'shinhy', 'shinhy101', 'shinhy@naver.com', '010-2222-4444', '2024-01-14 13:35:00', 0, 1, 0),
-('오지호', 'ohjh', 'ohjh202', 'ohjh@naver.com', '010-2222-5555', '2024-01-15 15:50:00', 0, 1, 0),
-('서연우', 'seoyw', 'seoyw303', 'seoyw@naver.com', '010-2222-6666', '2024-01-16 10:05:00', 0, 1, 0),
-('권서현', 'kwonsh', 'kwonsh404', 'kwonsh@naver.com', '010-2222-7777', '2024-01-17 14:40:00', 0, 1, 0),
-('김민수', 'minsoo', 'minsoo123', 'minsoo@gmail.com', '010-3333-1111', '2024-01-18 09:25:00', 0, 1, 1),
-('이지은', 'jieun', 'jieun456', 'jieun@daum.net', '010-3333-2222', '2024-01-19 16:55:00', 0, 1, 0),
-('박준호', 'junho', 'junho789', 'junho@naver.com', '010-3333-3333', '2024-01-20 11:30:00', 0, 1, 1),
-('최수진', 'sujin', 'sujin101', 'sujin@gmail.com', '010-3333-4444', '2024-01-21 13:45:00', 0, 1, 0),
-('정다은', 'daeun', 'daeun202', 'daeun@daum.net', '010-3333-5555', '2024-01-22 15:00:00', 0, 1, 1),
-('황민지', 'minji', 'minji303', 'minji@naver.com', '010-3333-6666', '2024-01-23 10:15:00', 0, 1, 0),
-('강현우', 'hyunwoo', 'hyunwoo404', 'hyunwoo@gmail.com', '010-3333-7777', '2024-01-24 14:50:00', 0, 1, 1),
-('조서연', 'seoyeon', 'seoyeon505', 'seoyeon@daum.net', '010-3333-8888', '2024-01-25 09:35:00', 0, 1, 0),
-('윤지훈', 'jihun', 'jihun606', 'jihun@naver.com', '010-3333-9999', '2024-01-26 16:05:00', 0, 1, 1),
-('장수아', 'sua', 'sua707', 'sua@gmail.com', '010-3333-0000', '2024-01-27 11:40:00', 0, 1, 0);
+('관리자', 'admin', '$2y$10$vHaZNVm2vbqFxRMS09t5jeWIYVv2eC3aTGfzxXndDSw7xfCusMbl6', 'admin@naver.com', '010-1234-1234', '2024-01-01 00:00:00', 1, 1, 0),
+('김서연', 'kimsy', '$2y$10$QFs/HG81eby9pDh9nHrfquj9K9KHrhVdBD4E7jDOm14aTUCeYbVIC', 'kimsy@naver.com', '010-1111-2222', '2024-01-02 10:30:00', 0, 1, 0),
+('이준호', 'leejh', '$2y$10$kTMGVe4u3eW2ctMN/xDQoO1TcXaA5y1mGK9S36eaaSbB0lEK5nlzC', 'leejh@naver.com', '010-1111-3333', '2024-01-03 14:15:00', 0, 1, 0),
+('박지민', 'parkjm', '$2y$10$n7/RK1YDQ9AmQgfZFKia1e1ICvcRdO2gBfnIQO/Bew3ptLiMn/uhO', 'parkjm@naver.com', '010-1111-4444', '2024-01-04 09:45:00', 0, 1, 0),
+('최민준', 'choimj', '$2y$10$1H6lTPBPed/xC0lv7QhFwuCKjez2FSVU8zN.YeGfadCUJcUsdgbcC', 'choimj@naver.com', '010-1111-5555', '2024-01-05 16:20:00', 0, 1, 0),
+('정서아', 'jeongsa', '$2y$10$SDNU236k2dWLeSY2xEmQq.wnWjSr8Dq7bStCVg5yWdG8yEGMtuwj.', 'jeongsa@naver.com', '010-1111-6666', '2024-01-06 11:10:00', 0, 1, 0),
+('황도현', 'hwangdh', '$2y$10$keuAxNK9dymMBm45b.UtoO9.56DjuDKTAt4hYXHyAcmaSfIiIzfI.', 'hwangdh@naver.com', '010-1111-7777', '2024-01-07 13:25:00', 0, 1, 0),
+('강수아', 'kangsa', '$2y$10$Zy7BDuozoxjIAeNaj4pjf.Lefpd.HitTyqnKJoP.9dQ2z30oZ6iFK', 'kangsa@naver.com', '010-1111-8888', '2024-01-08 15:40:00', 0, 1, 0),
+('조민서', 'joms', '$2y$10$nxNXM2ayEwof27kTHuZHOu4oq1MnfZHaCh6OrUB8zjWSh6J3aqmSe', 'joms@naver.com', '010-1111-9999', '2024-01-09 10:55:00', 0, 1, 0),
+('윤지우', 'yoonjw', '$2y$10$Q/4E0gInETv5hXObMh/5jO6uwsfCAzv0Iy2d2u/7kEjt0nILB48z6', 'yoonjw@naver.com', '010-1111-0000', '2024-01-10 14:30:00', 0, 1, 0),
+('장하준', 'janghj', '$2y$10$ml8QbVV.Jf.fX56qCiUG6.KrDtiQUdMRIB3VXImYMpmudG49qwI2W', 'janghj@naver.com', '010-2222-1111', '2024-01-11 09:15:00', 0, 1, 0),
+('임서준', 'limsj', '$2y$10$Tz79yqhE/eceYzfvMufN4eTqWhBQy4MviDPGgn.0rlG2y8eHWdxci', 'limsj@naver.com', '010-2222-2222', '2024-01-12 16:45:00', 0, 1, 0),
+('한지안', 'hanja', '$2y$10$CzMIoUPjZPLCRWrCKShwD.RKrY6Y1nEskHEwew2f3l9aBsR.88xLu', 'hanja@naver.com', '010-2222-3333', '2024-01-13 11:20:00', 0, 1, 0),
+('신하윤', 'shinhy', '$2y$10$qFwF/x3/9Z7m7Sdn083JsOWi39TRqq8TGoeP.VAWQW70jfmOg9n46', 'shinhy@naver.com', '010-2222-4444', '2024-01-14 13:35:00', 0, 1, 0),
+('오지호', 'ohjh', '$2y$10$xbZ9T8gBWjxryO8DOUfvR.B.VIHRKZtExPDvp7rJ1PXu7gjr3A/Pi', 'ohjh@naver.com', '010-2222-5555', '2024-01-15 15:50:00', 0, 1, 0),
+('서연우', 'seoyw', '$2y$10$ASUnZ0PypEI9cEKU4d5kGe0rQN9kju8/ZtEQev6Fu1i/FqetV/E8W', 'seoyw@naver.com', '010-2222-6666', '2024-01-16 10:05:00', 0, 1, 0),
+('권서현', 'kwonsh', '$2y$10$zIIy1KVDvS0vKeazBD6NhuXE6VTlrsm5NkWs7hdriO4zlJg7aCC4K', 'kwonsh@naver.com', '010-2222-7777', '2024-01-17 14:40:00', 0, 1, 0),
+('김민수', 'minsoo', '$2y$10$gXGlcAP2AM.4YtwSvX3X0uXEBIfLR/TsZom9qrRO8G1WM67XOiO.W', 'minsoo@gmail.com', '010-3333-1111', '2024-01-18 09:25:00', 0, 1, 1),
+('이지은', 'jieun', '$2y$10$bTaTWESyLtHxJl0zbd02oe5y1TLLnjALLvzwdv1xfXRODJS1ZPCJa', 'jieun@daum.net', '010-3333-2222', '2024-01-19 16:55:00', 0, 1, 0),
+('박준호', 'junho', '$2y$10$UWsRiFgNHP04jZofQx0LeuhtmpBtZUnVJhAgF2UXtVW6kPfwnDyWS', 'junho@naver.com', '010-3333-3333', '2024-01-20 11:30:00', 0, 1, 1),
+('최수진', 'sujin', '$2y$10$3i5gsuNNAdhupY4SiO6ak.VMb.dW.K77a749gzHRuaO9o6xur572y', 'sujin@gmail.com', '010-3333-4444', '2024-01-21 13:45:00', 0, 1, 0),
+('정다은', 'daeun', '$2y$10$PFz/JNQhzdRn0thNl78JC.MLN18jOhUQ60u5IRC0AUn6U/lH7Sq06', 'daeun@daum.net', '010-3333-5555', '2024-01-22 15:00:00', 0, 1, 1),
+('황민지', 'minji', '$2y$10$qSmzTUIMNj2DaJj6/E2zteaQAxUOG0oEpE.E87uagvFsTS0mYeZLy', 'minji@naver.com', '010-3333-6666', '2024-01-23 10:15:00', 0, 1, 0),
+('강현우', 'hyunwoo', '$2y$10$Yv0Oy.OvT9jdO5VKtkO5QOYgDQJQA0C4R6Z3Sl9zBQGoMlTmiRFFS', 'hyunwoo@gmail.com', '010-3333-7777', '2024-01-24 14:50:00', 0, 1, 1),
+('조서연', 'seoyeon', '$2y$10$fURjUs4RoDLR1bxR.rzTm.lAcy7l07V8NCPzC3FwIYwLrmTU9iIkC', 'seoyeon@daum.net', '010-3333-8888', '2024-01-25 09:35:00', 0, 1, 0),
+('윤지훈', 'jihun', '$2y$10$s81V.Wo7q6z65AixQS/mv.SNqP3/sRqVUZpbk2mfDsHNqXkSrCMTC', 'jihun@naver.com', '010-3333-9999', '2024-01-26 16:05:00', 0, 1, 1),
+('장수아', 'sua', '$2y$10$IedAc8GnC8SHpmH5krSn2OCbMuz1qsyKcaEqBDEQOyuv5WzSLh/oq', 'sua@gmail.com', '010-3333-0000', '2024-01-27 11:40:00', 0, 1, 0);
 
 UPDATE users SET profile_image='/uploads/discord.png' WHERE user_id=3;
 UPDATE users SET profile_image='/uploads/discord.png' WHERE user_id=18;
