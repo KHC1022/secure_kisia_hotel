@@ -4,7 +4,6 @@ include_once __DIR__ . '/../action/admin_access.php';
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../includes/info_for_admin.php';
 ?>
-
     <main class="admin-container">
         <h2 class="admin-title">관리자 메뉴</h2>
         <div class="admin-menu">
@@ -120,7 +119,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
 
                                             <!-- 회원 삭제 -->
                                              <?php if($user['is_admin'] != 1): ?>
-                                            <form method="get" action="../action/admin_delete_action.php" style="display:inline;">
+                                            <form method="post" action="../action/admin_delete_action.php" style="display:inline;">
                                                 <button name="user_delete" class="action-btn delete" value="<?= htmlspecialchars($user['user_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -186,7 +185,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <form method="get" action="../admin/hotel-edit.php">
                                                 <button name="hotel_edit" class="action-btn edit" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
-                                            <form method="get" action="../action/admin_delete_action.php">
+                                            <form method="post" action="../action/admin_delete_action.php">
                                                 <button name="hotel_delete" class="action-btn delete" value="<?= htmlspecialchars($hotel['hotel_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
@@ -261,7 +260,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             </span>
                                         </td>
                                         <td>
-                                            <form method="get" action="../action/admin_delete_action.php">
+                                            <form method="post" action="../action/admin_delete_action.php">
                                                 <input type="hidden" name="room_id" value="<?= htmlspecialchars($reservation['room_id'], ENT_QUOTES, 'UTF-8') ?>">
                                                 <button name="reservation_delete" class="action-btn delete" value="<?= htmlspecialchars($reservation['reservation_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
@@ -321,7 +320,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                         <td><?= mb_substr(htmlspecialchars($review['content'], ENT_QUOTES, 'UTF-8'), 0, 30) . (mb_strlen(htmlspecialchars($review['content'], ENT_QUOTES, 'UTF-8')) > 30 ? '...' : '') ?></td>
                                         <td><?= htmlspecialchars($review['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
                                         <td>
-                                            <form method="get" action="../action/admin_delete_action.php">
+                                            <form method="post" action="../action/admin_delete_action.php">
                                                 <a href="../hotel/hotel-detail.php?id=<?= htmlspecialchars($review['hotel_id'], ENT_QUOTES, 'UTF-8') ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
                                                 <button name="review_delete" class="action-btn delete" value="<?= htmlspecialchars($review['review_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
@@ -409,7 +408,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <form method="get" action="../action/admin_delete_action.php">
+                                            <form method="post" action="../action/admin_delete_action.php">
                                                 <a href="../inquiry/inquiry_detail.php?inquiry_id=<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>" class="action-btn view"><i class="fas fa-eye"></i></a>
                                                 <button name="inquiry_delete" class="action-btn delete" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
@@ -477,7 +476,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <form method="get" action="../admin/notice-edit.php">
                                                 <button name="notice_edit" class="action-btn edit" value="<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
-                                            <form method="get" action="../action/admin_delete_action.php">
+                                            <form method="post" action="../action/admin_delete_action.php">
                                                 <button name="notice_delete" class="action-btn delete" value="<?= htmlspecialchars($notice['notice_id'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
@@ -588,7 +587,7 @@ include_once __DIR__ . '/../includes/info_for_admin.php';
                                             <form method="get" action="../admin/coupon-edit.php">
                                                 <button name="coupon_edit" class="action-btn edit" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-edit"></i></button>
                                             </form>
-                                            <form method="get" action="../action/admin_delete_action.php">
+                                            <form method="post" action="../action/admin_delete_action.php">
                                                 <button name="coupon_delete" class="action-btn delete" value="<?= htmlspecialchars($coupon['code'], ENT_QUOTES, 'UTF-8') ?>"><i class="fas fa-trash"></i></button>
                                             </form>
                                         </td>
