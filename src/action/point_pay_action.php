@@ -54,7 +54,7 @@ $user_result = $user_stmt->get_result();
 $user = $user_result->fetch_assoc();
 
 if (!$user || $user['point'] < $total_price) {
-    echo "<script>alert('포인트가 부족합니다.'); history.back();</script>";
+    echo "<script>alert('포인트가 부족합니다.'); location.href='../user/mypage.php';</script>";
     exit;
 }
 
