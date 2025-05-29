@@ -67,7 +67,7 @@ $files_result = $file_stmt->get_result();
 
             <?php if ($files_result && $files_result->num_rows > 0): ?>
                 <div class="inquiry-edit-files">
-                    <h3>\ud83d\udcce 첨부 파일</h3>
+                    <h3>첨부 파일</h3>
                     <div class="file-list">
                         <?php while ($file = $files_result->fetch_assoc()): ?>
                             <a href="../action/file_download_action.php?file=<?= urlencode($file['file_path']) ?>" class="file-item" download>

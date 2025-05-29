@@ -3,7 +3,6 @@ include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../action/inquiry_detail_action.php';
 
-// 절대 include($_GET['file']) 같은 구문은 금지해야 하므로 삭제
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -39,10 +38,10 @@ include_once __DIR__ . '/../action/inquiry_detail_action.php';
 
         <?php if (!empty($files)): ?>
         <div class="inquiry-files">
-            <h3>📎 첨부 파일</h3>
+            <h3>첨부 파일</h3>
             <div class="file-list">
                 <?php foreach ($files as $file): ?>
-                    <a href="../action/file_download_action.php?file_id=<?= urlencode($file['id']) ?>" class="file-item">
+                    <a href="../action/file_download_action.php?file=<?= urlencode($file['file_path']) ?>" class="file-item">
                         <i class="fas fa-file-alt"></i> <?= htmlspecialchars($file['file_name'], ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 <?php endforeach; ?>
