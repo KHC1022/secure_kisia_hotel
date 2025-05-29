@@ -218,7 +218,7 @@ SET NAMES utf8mb4;
 
 -- 사용자 계정 추가
 INSERT INTO users (username, real_id, password, email, phone, created_at, is_admin, terms, marketing) VALUES 
-('관리자', 'admin', '$2y$10$vHaZNVm2vbqFxRMS09t5jeWIYVv2eC3aTGfzxXndDSw7xfCusMbl6', 'admin@naver.com', '010-1234-1234', '2024-01-01 00:00:00', 1, 1, 0),
+('관리자', 'admin', '$2y$10$ddnQzxr5YtqhJ1kj9nmI2uKYk4l4Bw2oGeZg9/nec8RBSxE2Wx9HG', 'admin@naver.com', '010-1234-1234', '2024-01-01 00:00:00', 1, 1, 0),
 ('김서연', 'kimsy', '$2y$10$QFs/HG81eby9pDh9nHrfquj9K9KHrhVdBD4E7jDOm14aTUCeYbVIC', 'kimsy@naver.com', '010-1111-2222', '2024-01-02 10:30:00', 0, 1, 0),
 ('이준호', 'leejh', '$2y$10$kTMGVe4u3eW2ctMN/xDQoO1TcXaA5y1mGK9S36eaaSbB0lEK5nlzC', 'leejh@naver.com', '010-1111-3333', '2024-01-03 14:15:00', 0, 1, 0),
 ('박지민', 'parkjm', '$2y$10$n7/RK1YDQ9AmQgfZFKia1e1ICvcRdO2gBfnIQO/Bew3ptLiMn/uhO', 'parkjm@naver.com', '010-1111-4444', '2024-01-04 09:45:00', 0, 1, 0),
