@@ -1,14 +1,35 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
+include_once __DIR__ . '/../action/login_check.php';
 
+// CSRF 토큰 검증
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+    echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+    exit;
+}
+
+$user_id = $_SESSION['user_id'] ?? null;
 $inquiry_id = isset($_POST['inquiry_id']) ? (int)$_POST['inquiry_id'] : 0;
 $category = trim($_POST['category'] ?? '');
 $title = trim($_POST['title'] ?? '');
 $content = trim($_POST['content'] ?? '');
 
-if ($inquiry_id < 1 || !$category || !$title || !$content) {
+// 필수 값 검증
+if (!$user_id || $inquiry_id < 1 || !$category || !$title || !$content) {
     echo "<script>alert('입력 값이 유효하지 않습니다.'); history.back();</script>";
+    exit;
+}
+
+// 작성자 본인 확인
+$check_stmt = $conn->prepare("SELECT user_id FROM inquiries WHERE inquiry_id = ?");
+$check_stmt->bind_param("i", $inquiry_id);
+$check_stmt->execute();
+$check_result = $check_stmt->get_result();
+$inquiry_data = $check_result->fetch_assoc();
+
+if (!$inquiry_data || (int)$inquiry_data['user_id'] !== (int)$user_id) {
+    echo "<script>alert('수정 권한이 없습니다.'); history.back();</script>";
     exit;
 }
 
@@ -77,3 +98,4 @@ if (isset($_FILES['files']) && is_array($_FILES['files']['name']) && $_FILES['fi
 
 echo "<script>alert('수정되었습니다.'); location.href='../inquiry/inquiry_detail.php?inquiry_id={$inquiry_id}';</script>";
 exit;
+?>

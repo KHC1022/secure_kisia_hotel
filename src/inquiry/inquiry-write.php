@@ -1,7 +1,7 @@
 <?php 
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../action/login_check.php';
-include_once __DIR__ . '/../includes/session.php'; // CSRF 토큰 위해 필요
+include_once __DIR__ . '/../includes/session.php';
 ?>
 
 <main class="inquiry-board-container">
@@ -11,7 +11,7 @@ include_once __DIR__ . '/../includes/session.php'; // CSRF 토큰 위해 필요
         </div>
 
         <form class="inquiry-form" method="post" action="../action/inquiry_write_action.php" enctype="multipart/form-data">
-            <!-- ✅ CSRF 토큰 포함 -->
+            <!-- CSRF 토큰 포함 -->
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
             <div class="inquiry-form-group">

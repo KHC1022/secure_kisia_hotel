@@ -1,6 +1,7 @@
 <?php
-include_once __DIR__ . '/../includes/db_connection.php';
+// inquiry-edit.php
 include_once __DIR__ . '/../includes/session.php';
+include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../action/login_check.php';
 
@@ -11,7 +12,6 @@ if ($inquiry_id < 1) {
     exit;
 }
 
-// 문의 정보 조회 (Prepared Statement)
 $stmt = $conn->prepare("SELECT * FROM inquiries WHERE inquiry_id = ?");
 $stmt->bind_param("i", $inquiry_id);
 $stmt->execute();
@@ -23,7 +23,12 @@ if (!$inquiry) {
     exit;
 }
 
-// 파일 목록 조회
+//작성자 본인 확인
+if (!isset($_SESSION['user_id']) || $inquiry['user_id'] !== $_SESSION['user_id']) {
+    echo "<script>alert('잘못된 접근입니다.'); history.back();</script>";
+    exit;
+}
+
 $file_stmt = $conn->prepare("SELECT * FROM inquiry_files WHERE inquiry_id = ?");
 $file_stmt->bind_param("i", $inquiry_id);
 $file_stmt->execute();
@@ -36,6 +41,7 @@ $files_result = $file_stmt->get_result();
             <h1 class="hotel-add-admin-title" style="color:black;">문의 수정</h1>
         </div>
         <form class="inquiry-form" method="post" action="../action/inquiry_edit_action.php" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="inquiry_id" value="<?= htmlspecialchars($inquiry['inquiry_id'], ENT_QUOTES, 'UTF-8') ?>">
 
             <div class="inquiry-form-group">
@@ -61,7 +67,7 @@ $files_result = $file_stmt->get_result();
 
             <?php if ($files_result && $files_result->num_rows > 0): ?>
                 <div class="inquiry-edit-files">
-                    <h3>📎 첨부 파일</h3>
+                    <h3>\ud83d\udcce 첨부 파일</h3>
                     <div class="file-list">
                         <?php while ($file = $files_result->fetch_assoc()): ?>
                             <a href="../action/file_download_action.php?file=<?= urlencode($file['file_path']) ?>" class="file-item" download>

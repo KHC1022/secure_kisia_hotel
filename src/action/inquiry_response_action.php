@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
+include_once __DIR__ . '/../action/admin_access.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo "<script>alert('잘못된 접근 방식입니다.'); history.back();</script>";

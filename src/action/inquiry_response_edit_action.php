@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
+include_once __DIR__ . '/../action/admin_access.php';
 
 // POST 요청인지 확인
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
