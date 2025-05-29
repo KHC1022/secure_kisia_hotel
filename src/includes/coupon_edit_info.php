@@ -10,7 +10,7 @@ if (!isset($_POST['coupon_edit']) || empty($_POST['coupon_edit'])) {
 
 $code = $_POST['coupon_edit'];
 
-// 쿠폰 정보 조회 (Prepared Statement 사용)
+// 쿠폰 정보 조회
 $sql = "SELECT * FROM coupons WHERE code = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $code);
