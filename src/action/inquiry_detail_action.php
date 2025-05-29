@@ -9,7 +9,7 @@ if ($inquiry_id < 1) {
     exit;
 }
 
-// 문의 조회 (Prepared Statement)
+// 문의 조회
 $query = "
     SELECT i.*, u.username 
     FROM inquiries i

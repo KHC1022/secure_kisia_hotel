@@ -1,11 +1,15 @@
 <?php
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
-include_once __DIR__ . '/../action/login_check.php';
 
 // CSRF 토큰 검증
 if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
     die("<script>alert('잘못된 접근입니다.'); history.back();</script>");
+}
+
+// 사용자 인증 여부 확인
+if (!isset($_SESSION['user_id'])) {
+    die("<script>alert('로그인이 필요합니다.'); location.href='../user/login.php';</script>");
 }
 
 $user_id = $_SESSION['user_id'];
@@ -27,7 +31,7 @@ if (!is_dir($upload_dir)) {
 }
 
 $files_to_upload = [];
-$allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt', 'doc', 'docx'];
+$allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
 $allowed_mime = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
 if (!empty($_FILES['files']['name'][0])) {
@@ -71,3 +75,4 @@ foreach ($files_to_upload as $file) {
 
 echo "<script>alert('등록 완료'); location.href='../inquiry/inquiry.php';</script>";
 exit;
+?>

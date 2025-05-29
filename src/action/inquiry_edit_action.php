@@ -44,9 +44,10 @@ if (!$update_result) {
 }
 
 // 파일 업로드 처리
-if (isset($_FILES['files']) && is_array($_FILES['files']['name']) && $_FILES['files']['name'][0] !== '') {
-    $allowed_ext = ['jpg', 'jpeg', 'png', 'pdf', 'txt', 'zip', 'docx'];
+if (!empty($_FILES['files']['name'][0])) {
+    $allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
     $allowed_mime = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain', 'application/zip', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    $max_file_size = 700 * 1024 * 1024; // 700MB
 
     // 기존 파일 삭제
     $select_stmt = $conn->prepare("SELECT file_path FROM inquiry_files WHERE inquiry_id = ?");
@@ -66,13 +67,22 @@ if (isset($_FILES['files']) && is_array($_FILES['files']['name']) && $_FILES['fi
     $del_stmt->execute();
 
     // 업로드 디렉터리 확인
-    $upload_dir = realpath(__DIR__ . '/../uploads');
+    $upload_dir = __DIR__ . '/../uploads/';
     if (!is_dir($upload_dir)) {
-        mkdir($upload_dir, 0775, true);
+        mkdir($upload_dir, 0755, true);
     }
 
+    $files_to_upload = [];
     foreach ($_FILES['files']['name'] as $i => $original_name) {
         $tmp_name = $_FILES['files']['tmp_name'][$i];
+        $file_size = $_FILES['files']['size'][$i];
+
+        // 파일 크기 체크
+        if ($file_size > $max_file_size) {
+            echo "<script>alert('파일 크기가 너무 큽니다. (최대 700MB)'); history.back();</script>";
+            exit;
+        }
+
         $ext = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
         $mime = mime_content_type($tmp_name);
 
@@ -81,17 +91,23 @@ if (isset($_FILES['files']) && is_array($_FILES['files']['name']) && $_FILES['fi
             exit;
         }
 
-        $new_name = uniqid('file_', true) . '.' . $ext;
-        $target_path = $upload_dir . '/' . $new_name;
-        $db_path = 'uploads/' . $new_name;
+        $safe_name = uniqid() . '_' . basename($original_name);
+        $files_to_upload[] = [
+            'original_name' => $original_name,
+            'safe_name' => $safe_name,
+            'tmp_name' => $tmp_name,
+            'target_path' => $upload_dir . $safe_name,
+            'relative_path' => 'uploads/' . $safe_name
+        ];
+    }
 
-        if (move_uploaded_file($tmp_name, $target_path)) {
-            $insert_stmt = $conn->prepare("INSERT INTO inquiry_files (inquiry_id, file_name, file_path) VALUES (?, ?, ?)");
-            $insert_stmt->bind_param("iss", $inquiry_id, $original_name, $db_path);
-            $insert_stmt->execute();
-        } else {
-            echo "<script>alert('파일 업로드 실패'); history.back();</script>";
-            exit;
+    // 파일 저장 및 DB 등록
+    foreach ($files_to_upload as $file) {
+        if (move_uploaded_file($file['tmp_name'], $file['target_path'])) {
+            $file_stmt = $conn->prepare("INSERT INTO inquiry_files (inquiry_id, file_name, file_path) VALUES (?, ?, ?)");
+            $file_stmt->bind_param("iss", $inquiry_id, $file['original_name'], $file['relative_path']);
+            $file_stmt->execute();
+            $file_stmt->close();
         }
     }
 }
