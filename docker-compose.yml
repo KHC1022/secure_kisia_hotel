@@ -24,12 +24,14 @@ services:
     build: .
     container_name: kisia_web
     ports:
-      - "8080:80"
+      - "8080:80"    # HTTP 포트
+      - "8443:443"   # HTTPS 포트
     volumes:
       - ./src:/var/www/html
+      - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf  # HTTP 리디렉션 설정
     depends_on:
       - mysql
     restart: always
 
 volumes:
-  mysql_data: 
+  mysql_data:
