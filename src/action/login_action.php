@@ -18,6 +18,10 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
 if ($user && password_verify($password, $user['password'])) {
+
+    //세션 ID 재생성
+    session_regenerate_id(true);
+
     // 세션 설정
     $_SESSION['is_login'] = true;
     $_SESSION['username'] = $user['username'];
