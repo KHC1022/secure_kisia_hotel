@@ -19,14 +19,19 @@ if (strlen($search) > 100 || preg_match('/[<>"\'&]/', $search)) {
     echo "<script>alert('검색어에 허용되지 않는 문자가 포함되어 있거나 너무 깁니다.'); history.back();</script>";
     exit;
 }
-if (strlen($checkin) > 10 || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $checkin)) {
-    echo "<script>alert('체크인 날짜 형식이 잘못되었습니다.'); history.back();</script>";
-    exit;
+if (!empty($checkin)) {
+    if (strlen($checkin) > 10 || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $checkin)) {
+        echo "<script>alert('체크인 날짜 형식이 잘못되었습니다.'); history.back();</script>";
+        exit;
+    }
 }
-if (strlen($checkout) > 10 || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $checkout)) {
-    echo "<script>alert('체크아웃 날짜 형식이 잘못되었습니다.'); history.back();</script>";
-    exit;
+if (!empty($checkout)) {
+    if (strlen($checkout) > 10 || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $checkout)) {
+        echo "<script>alert('체크아웃 날짜 형식이 잘못되었습니다.'); history.back();</script>";
+        exit;
+    }
 }
+
 
 // 게스트 수 제한
 $guests = max(1, min($guests, 4));
