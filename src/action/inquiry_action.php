@@ -19,9 +19,16 @@ $sort = $_GET['sort'] ?? 'recent';
 $order_by = ($sort === 'old') ? 'ASC' : 'DESC';
 $allowed_sorts = ['recent', 'old'];
 
+// 정렬값 유효성 검사
 if (!in_array($sort, $allowed_sorts)) {
     $sort = 'recent';
     $order_by = 'DESC';
+}
+
+// 키워드 유효성 검사
+if (strlen($keyword) > 100 || preg_match('/[<>"\'&]/', $keyword)) {
+    echo "<script>alert('검색어에 허용되지 않는 문자가 포함되어 있거나 너무 깁니다.'); history.back();</script>";
+    exit;
 }
 
 $inquiry_list = [];
@@ -71,7 +78,7 @@ if ($result) {
     while ($row = $result->fetch_assoc()) {
         $inquiry_id = $row['inquiry_id'];
 
-        // 답변 조회 (응답 있는지 확인용)
+        // 답변 조회
         $res_stmt = $conn->prepare("SELECT content, created_at FROM inquiry_responses WHERE inquiry_id = ? LIMIT 1");
         $res_stmt->bind_param("i", $inquiry_id);
         $res_stmt->execute();
@@ -95,6 +102,6 @@ $GLOBALS['inquiry_list'] = $inquiry_list;
 $GLOBALS['totalPages'] = $total_pages;
 $GLOBALS['page'] = $page;
 $GLOBALS['sort'] = $sort;
-$GLOBALS['keyword'] = $keyword;
+$GLOBALS['keyword'] = htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8');  // 출력용 안전 처리
 $GLOBALS['totalInquiries'] = $total_inquiries;
 ?>
