@@ -1,7 +1,6 @@
 <?php
-// 세션 시작
 include_once __DIR__ . '/../includes/session.php';
-include_once __DIR__ . '/../includes/db_connection.php'; // 필요 시 유지
+include_once __DIR__ . '/../includes/db_connection.php';
 
 // 모든 세션 변수 제거
 $_SESSION = array();
