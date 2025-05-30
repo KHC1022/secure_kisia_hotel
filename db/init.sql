@@ -17,7 +17,9 @@ CREATE TABLE users (
     profile_image VARCHAR(255) DEFAULT '/image/default_profile.jpg',
     point INT DEFAULT 0,
     vip BOOLEAN DEFAULT FALSE,
-    vip_status ENUM('auto', 'manual') DEFAULT 'auto'
+    vip_status ENUM('auto', 'manual') DEFAULT 'auto',
+    login_attempts INT DEFAULT 0,
+    last_failed_at DATETIME DEFAULT NULL
 );
 
 
