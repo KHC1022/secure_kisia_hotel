@@ -374,6 +374,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['search'])) {
         case 'notice_title_search':
             $tab = 'notices';
             break;
+        case 'coupon_code_search':
+            $tab = 'coupons';
+            break;
     }
     
     if ($tab !== '') {
@@ -381,5 +384,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['search'])) {
         exit;
     }
 }
-
 ?> 
