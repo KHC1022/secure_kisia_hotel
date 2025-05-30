@@ -24,7 +24,20 @@ if (!$category || !$title || !$content) {
     exit;
 }
 
-// 파일 유효성 검사 (확장자 및 MIME)
+if (strlen($title) > 100) {
+    echo "<script>alert('제목은 100자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (strlen($content) > 5000) {
+    echo "<script>alert('내용은 5000자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (count($_POST) > 1000) {
+    echo "<script>alert('입력 항목 수가 너무 많습니다.'); history.back();</script>";
+    exit;
+}
+
+// 파일 유효성 검사
 $upload_dir = __DIR__ . '/../uploads/';
 if (!is_dir($upload_dir)) {
     mkdir($upload_dir, 0755, true);
@@ -39,6 +52,11 @@ if (!empty($_FILES['files']['name'][0])) {
         $tmp_name = $_FILES['files']['tmp_name'][$i];
         $ext = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
         $mime = mime_content_type($tmp_name);
+
+        if (filesize($tmp_name) > 5 * 1024 * 1024) {
+            echo "<script>alert('각 파일 크기는 5MB를 초과할 수 없습니다.'); history.back();</script>";
+            exit;
+        }
 
         if (!in_array($ext, $allowed_ext) || !in_array($mime, $allowed_mime)) {
             echo "<script>alert('허용되지 않은 파일 형식입니다.'); history.back();</script>";

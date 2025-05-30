@@ -10,7 +10,7 @@ if ($id === '' || $password === '') {
     exit;
 }
 
-// 사용자 조회 (SQL Injection 방지 위해 prepare 사용)
+// 사용자 조회
 $stmt = $conn->prepare("SELECT user_id, real_id, username, password, is_admin FROM users WHERE real_id = ?");
 $stmt->bind_param("s", $id);
 $stmt->execute();

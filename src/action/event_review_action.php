@@ -24,6 +24,11 @@ if (empty($comment)) {
     exit;
 }
 
+if (strlen($comment) > 500) {
+    echo "<script>alert('댓글은 500자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+
 $stmt = $conn->prepare("INSERT INTO event_comments (user_id, comment, created_at) VALUES (?, ?, NOW())");
 $stmt->bind_param("is", $user_id, $comment);
 

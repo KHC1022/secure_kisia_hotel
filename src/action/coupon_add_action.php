@@ -42,6 +42,20 @@ try {
     $usage_limit = isset($_GET['usage_limit']) ? (int)$_GET['usage_limit'] : null;
     $is_active = isset($_GET['is_active']) ? 1 : 0;
 
+    // 길이 제한 검사
+    if (strlen($code) > 30) {
+        throw new Exception("쿠폰 코드는 30자 이내로 입력해주세요.");
+    }
+    if (strlen($name) > 50) {
+        throw new Exception("쿠폰 이름은 50자 이내로 입력해주세요.");
+    }
+    if (strlen($discount_type) > 20) {
+        throw new Exception("할인 유형은 20자 이내로 입력해주세요.");
+    }
+    if (strlen($start_date) > 20 || strlen($end_date) > 20) {
+        throw new Exception("날짜 형식이 너무 깁니다.");
+    }
+
     // 할인 유형과 값 검증
     if (!in_array($discount_type, ['percentage', 'fixed'])) {
         throw new Exception("할인 유형이 유효하지 않습니다.");

@@ -15,6 +15,26 @@ try {
             }
         }
 
+        // 입력값 길이 제한 검사
+        if (strlen($_POST['code']) > 30) {
+            throw new Exception("쿠폰 코드는 30자 이내로 입력해주세요.");
+        }
+        if (strlen($_POST['name']) > 50) {
+            throw new Exception("쿠폰 이름은 50자 이내로 입력해주세요.");
+        }
+        if (!empty($_POST['description']) && strlen($_POST['description']) > 500) {
+            throw new Exception("설명은 500자 이내로 입력해주세요.");
+        }
+        if (strlen($_POST['discount_type']) > 20) {
+            throw new Exception("할인 타입은 20자 이내로 입력해주세요.");
+        }
+        if (!empty($_POST['start_date']) && strlen($_POST['start_date']) > 20) {
+            throw new Exception("시작 날짜 형식이 잘못되었습니다.");
+        }
+        if (!empty($_POST['end_date']) && strlen($_POST['end_date']) > 20) {
+            throw new Exception("종료 날짜 형식이 잘못되었습니다.");
+        }
+
         $data = [
             ':code' => $_POST['code'],
             ':name' => $_POST['name'],

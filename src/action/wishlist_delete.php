@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id']) || !isset($_GET['hotel_id']) || !is_numeric($_G
 $user_id = $_SESSION['user_id'];
 $hotel_id = (int)$_GET['hotel_id'];
 
-// Prepared Statement 사용
 $stmt = $conn->prepare("DELETE FROM wishlist WHERE user_id = ? AND hotel_id = ?");
 $stmt->bind_param("ii", $user_id, $hotel_id);
 
