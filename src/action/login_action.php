@@ -22,12 +22,13 @@ if ($user) {
     $attempts = $user['login_attempts'];
     $last_failed = $user['last_failed_at'];
 
-    // 5회 이상 실패한 경우
+
+    // 로그인 5회 실페한 경우
     if ($attempts >= 5) {
         $now = new DateTime();
         $last = new DateTime($last_failed);
-        $diff = max(0, $now->getTimestamp() - $last->getTimestamp()); 
-
+        $diff = max(0, $now->getTimestamp() - $last->getTimestamp());
+    
         // 5분 제한
         if ($diff < 300) {
             $remain = 300 - $diff;
@@ -36,8 +37,15 @@ if ($user) {
             $msg = "로그인을 5회 이상 실패하였습니다. 약 {$minutes}분 {$seconds}초 뒤 다시 시도해주세요.";
             echo "<script>alert('$msg'); history.back();</script>";
             exit;
+        } else {
+            // 제한시간 지났으면 초기화
+            $stmt = $conn->prepare("UPDATE users SET login_attempts = 0, last_failed_at = NULL WHERE user_id = ?");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $attempts = 0;
         }
     }
+    
 
     // 로그인 시도
     if (password_verify($password, $user['password'])) {
