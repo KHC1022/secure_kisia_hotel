@@ -2,7 +2,6 @@
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
 
-// POST 방식으로 수신 및 이스케이프
 $name = trim($_POST['username'] ?? '');
 $id = trim($_POST['real_id'] ?? '');
 $password = $_POST['password'] ?? '';

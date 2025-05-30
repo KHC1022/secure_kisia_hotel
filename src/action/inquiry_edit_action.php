@@ -21,6 +21,20 @@ if (!$user_id || $inquiry_id < 1 || !$category || !$title || !$content) {
     exit;
 }
 
+// 길이 제한 검증
+if (strlen($title) > 100) {
+    echo "<script>alert('제목은 100자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (strlen($content) > 5000) {
+    echo "<script>alert('내용은 5000자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (count($_POST) > 1000) {
+    echo "<script>alert('입력 항목이 너무 많습니다.'); history.back();</script>";
+    exit;
+}
+
 // 작성자 본인 확인
 $check_stmt = $conn->prepare("SELECT user_id FROM inquiries WHERE inquiry_id = ?");
 $check_stmt->bind_param("i", $inquiry_id);

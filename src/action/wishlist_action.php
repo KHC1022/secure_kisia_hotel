@@ -11,7 +11,7 @@ if (!isset($_GET['hotel_id']) || !is_numeric($_GET['hotel_id'])) {
 $hotel_id = (int)$_GET['hotel_id'];
 $user_id = $_SESSION['user_id'];
 
-// 중복 확인 (Prepared Statement)
+// 중복 확인
 $check_sql = "SELECT 1 FROM wishlist WHERE user_id = ? AND hotel_id = ?";
 $stmt = $conn->prepare($check_sql);
 $stmt->bind_param("ii", $user_id, $hotel_id);
@@ -25,7 +25,6 @@ if ($stmt->num_rows > 0) {
 }
 $stmt->close();
 
-// 삽입
 $insert_sql = "INSERT INTO wishlist (user_id, hotel_id, created_at) VALUES (?, ?, NOW())";
 $insert_stmt = $conn->prepare($insert_sql);
 $insert_stmt->bind_param("ii", $user_id, $hotel_id);

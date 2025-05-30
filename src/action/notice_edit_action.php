@@ -35,6 +35,19 @@ if ($notice_id < 1 || empty($title) || empty($content)) {
     exit;
 }
 
+if (strlen($title) > 100) {
+  echo "<script>alert('제목은 100자 이내로 입력해주세요.'); history.back();</script>";
+  exit;
+}
+if (strlen($content) > 5000) {
+  echo "<script>alert('내용은 5000자 이내로 입력해주세요.'); history.back();</script>";
+  exit;
+}
+if (count($_POST) > 1000) {
+  echo "<script>alert('입력 항목 수가 너무 많습니다.'); history.back();</script>";
+  exit;
+}
+
 $sql = "UPDATE notices 
         SET title = ?, 
             content = ?, 

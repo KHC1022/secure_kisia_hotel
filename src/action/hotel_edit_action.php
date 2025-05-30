@@ -24,6 +24,26 @@ $location = $_POST['location'];
 $description = $_POST['description'];
 $price_per_night = (int)$_POST['price_per_night'];
 
+if (strlen($name) > 100) {
+    echo "<script>alert('호텔 이름은 100자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+
+if (strlen($location) > 30) {
+    echo "<script>alert('위치는 30자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+
+if (strlen($description) > 3000) {
+    echo "<script>alert('호텔 설명은 3000자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+
+if ($price_per_night <= 0 || $price_per_night > 10000000) {
+    echo "<script>alert('1박 금액이 유효하지 않은 금액입니다. (1~1,000만 원 이하)'); history.back();</script>";
+    exit;
+}
+
 $stmt = $conn->prepare("UPDATE hotels SET name = ?, location = ?, description = ?, price_per_night = ? WHERE hotel_id = ?");
 $stmt->bind_param("sssii", $name, $location, $description, $price_per_night, $hotel_id);
 if (!$stmt->execute()) {

@@ -11,6 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
     $user_id = (int)$_SESSION['user_id'];
     $hotel_id = (int)$_POST['hotel_id'];
 
+    if (strlen($content) > 5000) {
+        echo "<script>alert('내용은 5000자 이내로 입력해주세요.'); history.back();</script>";
+        exit;
+    }
+
     $image_path = '';
     if (isset($_FILES['review_image']) && $_FILES['review_image']['error'] === 0) {
         $target_dir = __DIR__ . "/../uploads/reviews/";

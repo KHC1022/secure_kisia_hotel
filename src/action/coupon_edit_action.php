@@ -27,6 +27,28 @@ $maximum_discount = isset($_POST['maximum_discount']) ? (int)$_POST['maximum_dis
 $usage_limit = isset($_POST['usage_limit']) ? (int)$_POST['usage_limit'] : null;
 $is_active = isset($_POST['is_active']) ? 1 : 0;
 
+// 입력값 길이 제한 검사
+if (strlen($code) > 30) {
+    echo "<script>alert('쿠폰 코드는 30자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (strlen($name) > 50) {
+    echo "<script>alert('쿠폰 이름은 50자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (strlen($discount_type) > 20) {
+    echo "<script>alert('할인 유형은 20자 이내로 입력해주세요.'); history.back();</script>";
+    exit;
+}
+if (!empty($start_date) && strlen($start_date) > 20) {
+    echo "<script>alert('시작일 형식이 잘못되었습니다.'); history.back();</script>";
+    exit;
+}
+if (!empty($end_date) && strlen($end_date) > 20) {
+    echo "<script>alert('종료일 형식이 잘못되었습니다.'); history.back();</script>";
+    exit;
+}
+
 // 할인 유형 및 날짜 유효성 검사
 if (!in_array($discount_type, ['percentage', 'fixed'])) {
     echo "<script>alert('유효하지 않은 할인 유형입니다.'); history.back();</script>";
