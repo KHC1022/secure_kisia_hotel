@@ -19,17 +19,15 @@ $user = $result->fetch_assoc();
 
 if ($user) {
     $user_id = $user['user_id'];
-    $attempts = $user['login_attempts'];
+    $attempts = (int)$user['login_attempts'];
     $last_failed = $user['last_failed_at'];
 
-
-    // 로그인 5회 실페한 경우
-    if ($attempts >= 5) {
+    // 로그인 실패 5회 초과 시 제한 확인
+    if ($attempts >= 5 && $last_failed !== null) {
         $now = new DateTime();
         $last = new DateTime($last_failed);
         $diff = max(0, $now->getTimestamp() - $last->getTimestamp());
-    
-        // 5분 제한
+
         if ($diff < 300) {
             $remain = 300 - $diff;
             $minutes = floor($remain / 60);
@@ -45,7 +43,6 @@ if ($user) {
             $attempts = 0;
         }
     }
-    
 
     // 로그인 시도
     if (password_verify($password, $user['password'])) {
@@ -68,10 +65,13 @@ if ($user) {
             echo "<script>alert('로그인 되었습니다.'); location.href = '../index.php';</script>";
         }
         exit;
-
     } else {
-        // 실패 기록 증가
-        $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1, last_failed_at = NOW() WHERE user_id = ?");
+        // 로그인 실패 처리 (5회 미만일 경우만 시간 업데이트)
+        if ($attempts < 5) {
+            $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1, last_failed_at = NOW() WHERE user_id = ?");
+        } else {
+            $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1 WHERE user_id = ?");
+        }
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
 
