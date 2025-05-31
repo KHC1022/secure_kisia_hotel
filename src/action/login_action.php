@@ -66,14 +66,8 @@ if ($user) {
         }
         exit;
     } else {
-        // 로그인 실패 처리
-        if ($attempts < 4) {
-            // 4회 이하 실패: 실패 횟수 증가 + 시간 갱신
-            $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1, last_failed_at = NOW() WHERE user_id = ?");
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-        } else if ($attempts === 4) {
-            // 5번째 실패: 마지막 실패 시각 기록
+        // 로그인 실패 처리 (5회 미만일 때만 누적)
+        if ($attempts < 5) {
             $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1, last_failed_at = NOW() WHERE user_id = ?");
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
