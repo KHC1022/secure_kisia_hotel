@@ -66,14 +66,16 @@ if ($user) {
         }
         exit;
     } else {
-        // 로그인 실패 처리 (5회 미만일 때만 누적)
+        // 로그인 실패 처리
         if ($attempts < 5) {
+            // 5회 미만 실패: 실패 횟수 증가 + 시간 갱신
             $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1, last_failed_at = NOW() WHERE user_id = ?");
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
         }
-
-        echo "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.'); history.back();</script>";
+        // 5회 이상 실패한 경우 추가 시도는 무시
+        $msg = $attempts >= 5 ? "로그인 시도가 제한되었습니다. 잠시 후 다시 시도해주세요." : "아이디 또는 비밀번호가 일치하지 않습니다.";
+        echo "<script>alert('$msg'); history.back();</script>";
         exit;
     }
 
