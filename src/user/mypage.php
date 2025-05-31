@@ -2,7 +2,6 @@
 
 include_once __DIR__ . '/../includes/header.php';
 include_once __DIR__ . '/../action/mypage_action.php';
-include_once __DIR__ . '/../includes/login_check.php';
 $users = $GLOBALS['users'];
 ?>
 

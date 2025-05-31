@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
+include_once __DIR__ . '/../includes/login_check.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
@@ -8,7 +9,7 @@ if (!$user_id) {
     exit;
 }
 
-// ✅ VIP 점수 계산 함수
+// VIP 점수 계산 함수
 function calculate_vip_score($user_id, $conn) {
     $stmt = $conn->prepare("
         SELECT 
@@ -26,7 +27,7 @@ function calculate_vip_score($user_id, $conn) {
     return (int)$counts['done_count'] - (int)$counts['cancel_count'];
 }
 
-// ✅ VIP 상태 갱신 함수
+//  VIP 상태 갱신 함수
 function update_vip_status($user_id, $vip_score, $conn) {
     $stmt = $conn->prepare("SELECT vip_status FROM users WHERE user_id = ?");
     $stmt->bind_param("i", $user_id);
@@ -47,11 +48,11 @@ function update_vip_status($user_id, $vip_score, $conn) {
     return $stmt->execute();
 }
 
-// ✅ VIP 상태 갱신
+// VIP 상태 갱신
 $vip_score = calculate_vip_score($user_id, $conn);
 update_vip_status($user_id, $vip_score, $conn);
 
-// ✅ 유저 정보
+// 유저 정보
 $user_stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
 $user_stmt->bind_param("i", $user_id);
 $user_stmt->execute();
@@ -59,12 +60,12 @@ $user_result = $user_stmt->get_result();
 $users = $user_result->fetch_assoc();
 $user_stmt->close();
 
-// ✅ 페이징 설정
+// 페이징 설정
 $reservation_items_per_page = 3;
 $wishlist_items_per_page = 5;
 $page = max(1, (int)($_GET['page'] ?? 1));
 
-// ✅ 찜 목록 개수
+// 찜 목록 개수
 $wishlist_count_stmt = $conn->prepare("
     SELECT COUNT(*) as total 
     FROM wishlist w
@@ -79,7 +80,7 @@ $wishlist_count_stmt->close();
 $total_wishlist_pages = ceil($total_wishlist_items / $wishlist_items_per_page);
 $wishlist_offset = ($page - 1) * $wishlist_items_per_page;
 
-// ✅ 찜 목록 조회
+// 찜 목록 조회
 $wishlist_stmt = $conn->prepare("
     SELECT w.hotel_id, h.name
     FROM wishlist w
@@ -93,7 +94,7 @@ $wishlist_stmt->execute();
 $wishlist_items = $wishlist_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $wishlist_stmt->close();
 
-// ✅ 예약 내역 개수
+// 예약 내역 개수
 $reservation_count_stmt = $conn->prepare("
     SELECT COUNT(*) as total 
     FROM reservations r
@@ -109,7 +110,7 @@ $reservation_count_stmt->close();
 $total_reservation_pages = ceil($total_reservation_items / $reservation_items_per_page);
 $reservation_offset = ($page - 1) * $reservation_items_per_page;
 
-// ✅ 예약 내역 조회
+// 예약 내역 조회
 $reservation_stmt = $conn->prepare("
     SELECT r.*, h.name AS hotel_name, rm.room_type, rm.hotel_id
     FROM reservations r
@@ -124,7 +125,7 @@ $reservation_stmt->execute();
 $reservations = $reservation_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $reservation_stmt->close();
 
-// ✅ 전역 변수 저장
+// 전역 변수 저장
 $GLOBALS['vip_score'] = $vip_score;
 $GLOBALS['users'] = $users;
 $GLOBALS['page'] = $page;
