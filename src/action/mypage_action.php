@@ -1,7 +1,7 @@
 <?php
 include_once __DIR__ . '/../includes/db_connection.php';
 include_once __DIR__ . '/../includes/session.php';
-include_once __DIR__ . '/../includes/login_check.php';
+include_once __DIR__ . '/../action/login_check.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
