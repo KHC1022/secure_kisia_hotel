@@ -2,165 +2,122 @@
 include_once __DIR__ . '/../includes/session.php';
 include_once __DIR__ . '/../includes/db_connection.php';
 
-function getSafeFilename($originalName) {
-    $originalName = basename($originalName); // 경로 제거
-    $randomPrefix = bin2hex(random_bytes(5)); // 랜덤값
-    return $randomPrefix . '_' . $originalName;
+// 날짜 유효성 검사 함수
+function isValidDateTime($dt) {
+    return $dt !== null && $dt !== '' && $dt !== '0000-00-00 00:00:00';
 }
 
-// 관리자가 아닌 경우 CSRF 토큰 검증
-if (!isset($_SESSION['is_admin'])) {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
-        echo "<script>alert('잘못된 요청입니다.'); history.back();</script>";
+// 시간대 명시 (Asia/Seoul)
+$tz = new DateTimeZone('Asia/Seoul');
+
+$id = trim($_POST['real_id'] ?? '');
+$password = $_POST['password'] ?? '';
+
+if ($id === '' || $password === '') {
+    echo "<script>alert('아이디 또는 비밀번호를 입력해주세요.'); history.back();</script>";
+    exit;
+}
+
+// 사용자 조회
+$stmt = $conn->prepare("SELECT user_id, real_id, username, password, is_admin, login_attempts, last_failed_at FROM users WHERE real_id = ?");
+$stmt->bind_param("s", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if ($user) {
+    $user_id = $user['user_id'];
+    $attempts = (int)$user['login_attempts'];
+    $last_failed = $user['last_failed_at'];
+
+    // 로그인 실패 5회 이상일 경우 제한 확인
+    if ($attempts >= 5 && isValidDateTime($last_failed)) {
+        try {
+            $now = new DateTime('now', $tz);
+            $last = new DateTime($last_failed, $tz);
+            $diff = $now->getTimestamp() - $last->getTimestamp();
+
+            if ($diff < 300) {
+                $remain = 300 - $diff;
+                $minutes = floor($remain / 60);
+                $seconds = $remain % 60;
+                $msg = "로그인을 5회 이상 실패하였습니다. 약 {$minutes}분 {$seconds}초 뒤 다시 시도해주세요.";
+                echo "<script>alert('$msg'); history.back();</script>";
+                exit;
+            } else {
+                // 제한 시간 경과 → 실패 기록 초기화
+                $stmt = $conn->prepare("UPDATE users SET login_attempts = 0, last_failed_at = NULL WHERE user_id = ?");
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $attempts = 0;
+            }
+        } catch (Exception $e) {
+            echo "<script>alert('시간 처리 오류 발생: {$e->getMessage()}'); history.back();</script>";
+            exit;
+        }
+    }
+
+    // 로그인 성공 처리
+    if (password_verify($password, $user['password'])) {
+        session_regenerate_id(true);
+
+        // 로그인 성공 → 실패 기록 초기화
+        $stmt = $conn->prepare("UPDATE users SET login_attempts = 0, last_failed_at = NULL WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+
+        $_SESSION['is_login'] = true;
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['real_id'] = $user['real_id'];
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['is_admin'] = $user['is_admin'];
+
+        if ($user['is_admin']) {
+            echo "<script>alert('관리자님 안녕하세요.'); location.href = '../admin/admin.php';</script>";
+        } else {
+            echo "<script>alert('로그인 되었습니다.'); location.href = '../index.php';</script>";
+        }
         exit;
-    }
-}
-
-$hotel_id = (int)$_POST['hotel_id'];
-
-// 호텔 기본 정보 업데이트
-$name = $_POST['name'];
-$location = $_POST['location'];
-$description = $_POST['description'];
-$price_per_night = (int)$_POST['price_per_night'];
-
-if (strlen($name) > 100) {
-    echo "<script>alert('호텔 이름은 100자 이내로 입력해주세요.'); history.back();</script>";
-    exit;
-}
-
-if (strlen($location) > 30) {
-    echo "<script>alert('위치는 30자 이내로 입력해주세요.'); history.back();</script>";
-    exit;
-}
-
-if (strlen($description) > 3000) {
-    echo "<script>alert('호텔 설명은 3000자 이내로 입력해주세요.'); history.back();</script>";
-    exit;
-}
-
-if ($price_per_night <= 0 || $price_per_night > 10000000) {
-    echo "<script>alert('1박 금액이 유효하지 않은 금액입니다. (1~1,000만 원 이하)'); history.back();</script>";
-    exit;
-}
-
-$stmt = $conn->prepare("UPDATE hotels SET name = ?, location = ?, description = ?, price_per_night = ? WHERE hotel_id = ?");
-$stmt->bind_param("sssii", $name, $location, $description, $price_per_night, $hotel_id);
-if (!$stmt->execute()) {
-    echo "<script>alert('호텔 기본 정보 업데이트 실패'); history.back();</script>";
-    exit;
-}
-
-$upload_dir = "../image/";
-
-// 메인 이미지
-if (isset($_FILES['main_image']) && $_FILES['main_image']['size'] > 0) {
-    $old = $conn->prepare("SELECT main_image FROM hotels WHERE hotel_id = ?");
-    $old->bind_param("i", $hotel_id);
-    $old->execute();
-    $result = $old->get_result()->fetch_assoc();
-    if ($result && $result['main_image']) {
-        $path = __DIR__ . '/..' . $result['main_image'];
-        if (file_exists($path)) unlink($path);
-    }
-
-    $safeName = getSafeFilename($_FILES['main_image']['name']);
-    move_uploaded_file($_FILES['main_image']['tmp_name'], $upload_dir . $safeName);
-
-    $img_path = '/image/' . $safeName;
-    $stmt = $conn->prepare("UPDATE hotels SET main_image = ? WHERE hotel_id = ?");
-    $stmt->bind_param("si", $img_path, $hotel_id);
-    $stmt->execute();
-}
-
-// 상세 이미지 1~4
-for ($i = 1; $i <= 4; $i++) {
-    $key = "detail_image_$i";
-    if (isset($_FILES[$key]) && $_FILES[$key]['size'] > 0) {
-        $old = $conn->prepare("SELECT $key FROM hotels WHERE hotel_id = ?");
-        $old->bind_param("i", $hotel_id);
-        $old->execute();
-        $result = $old->get_result()->fetch_assoc();
-        if ($result && $result[$key]) {
-            $path = __DIR__ . '/..' . $result[$key];
-            if (file_exists($path)) unlink($path);
+    } else {
+        // 로그인 실패 처리
+        if ($attempts < 5) {
+            $stmt = $conn->prepare("UPDATE users SET login_attempts = login_attempts + 1, last_failed_at = NOW() WHERE user_id = ?");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
         }
 
-        $safeName = getSafeFilename($_FILES[$key]['name']);
-        move_uploaded_file($_FILES[$key]['tmp_name'], $upload_dir . $safeName);
-
-        $img_path = '/image/' . $safeName;
-        $stmt = $conn->prepare("UPDATE hotels SET $key = ? WHERE hotel_id = ?");
-        $stmt->bind_param("si", $img_path, $hotel_id);
+        // 실패 이후 최신 상태 재조회
+        $stmt = $conn->prepare("SELECT login_attempts, last_failed_at FROM users WHERE user_id = ?");
+        $stmt->bind_param("i", $user_id);
         $stmt->execute();
-    }
-}
+        $updated = $stmt->get_result()->fetch_assoc();
+        $updated_attempts = (int)$updated['login_attempts'];
+        $updated_last_failed = $updated['last_failed_at'];
 
-// 부대시설
-$facilities = $_POST['facilities'] ?? [];
-$pool = in_array('pool', $facilities) ? 1 : 0;
-$spa = in_array('spa', $facilities) ? 1 : 0;
-$fitness = in_array('fitness', $facilities) ? 1 : 0;
-$restaurant = in_array('restaurant', $facilities) ? 1 : 0;
-$parking = in_array('parking', $facilities) ? 1 : 0;
-$wifi = in_array('wifi', $facilities) ? 1 : 0;
+        // 제한 메시지 구성
+        if ($updated_attempts >= 5 && isValidDateTime($updated_last_failed)) {
+            $now = new DateTime('now', $tz);
+            $last = new DateTime($updated_last_failed, $tz);
+            $diff = $now->getTimestamp() - $last->getTimestamp();
+            $remain = max(0, 300 - $diff);
+            $minutes = floor($remain / 60);
+            $seconds = $remain % 60;
 
-$stmt = $conn->prepare("UPDATE hotel_facilities SET pool = ?, spa = ?, fitness = ?, restaurant = ?, parking = ?, wifi = ? WHERE hotel_id = ?");
-$stmt->bind_param("iiiiiii", $pool, $spa, $fitness, $restaurant, $parking, $wifi, $hotel_id);
-$stmt->execute();
+            if ($remain > 0) {
+                $msg = "로그인 시도가 제한되었습니다. 약 {$minutes}분 {$seconds}초 뒤 다시 시도해주세요.";
+            } else {
+                $msg = "로그인 시도가 제한되었으나 제한 시간이 경과되었습니다. 다시 시도해주세요.";
+            }
+        } else {
+            $msg = "아이디 또는 비밀번호가 일치하지 않습니다.";
+        }
 
-// 디럭스 룸
-$deluxe_max = (int)$_POST['deluxe_max_person'];
-$deluxe_price = (int)$_POST['deluxe_price'];
-$stmt = $conn->prepare("UPDATE rooms SET max_person = ?, price = ? WHERE hotel_id = ? AND room_type = 'deluxe'");
-$stmt->bind_param("iii", $deluxe_max, $deluxe_price, $hotel_id);
-$stmt->execute();
-
-if (isset($_FILES['deluxe_image']) && $_FILES['deluxe_image']['size'] > 0) {
-    $old = $conn->prepare("SELECT rooms_image FROM rooms WHERE hotel_id = ? AND room_type = 'deluxe'");
-    $old->bind_param("i", $hotel_id);
-    $old->execute();
-    $result = $old->get_result()->fetch_assoc();
-    if ($result && $result['rooms_image']) {
-        $path = __DIR__ . '/..' . $result['rooms_image'];
-        if (file_exists($path)) unlink($path);
+        echo "<script>alert('$msg'); history.back();</script>";
+        exit;
     }
 
-    $safeName = getSafeFilename($_FILES['deluxe_image']['name']);
-    move_uploaded_file($_FILES['deluxe_image']['tmp_name'], $upload_dir . $safeName);
-
-    $img_path = '/image/' . $safeName;
-    $stmt = $conn->prepare("UPDATE rooms SET rooms_image = ? WHERE hotel_id = ? AND room_type = 'deluxe'");
-    $stmt->bind_param("si", $img_path, $hotel_id);
-    $stmt->execute();
+} else {
+    echo "<script>alert('존재하지 않는 계정입니다.'); history.back();</script>";
+    exit;
 }
-
-// 스위트 룸
-$suite_max = (int)$_POST['suite_max_person'];
-$suite_price = (int)$_POST['suite_price'];
-$stmt = $conn->prepare("UPDATE rooms SET max_person = ?, price = ? WHERE hotel_id = ? AND room_type = 'suite'");
-$stmt->bind_param("iii", $suite_max, $suite_price, $hotel_id);
-$stmt->execute();
-
-if (isset($_FILES['suite_image']) && $_FILES['suite_image']['size'] > 0) {
-    $old = $conn->prepare("SELECT rooms_image FROM rooms WHERE hotel_id = ? AND room_type = 'suite'");
-    $old->bind_param("i", $hotel_id);
-    $old->execute();
-    $result = $old->get_result()->fetch_assoc();
-    if ($result && $result['rooms_image']) {
-        $path = __DIR__ . '/..' . $result['rooms_image'];
-        if (file_exists($path)) unlink($path);
-    }
-
-    $safeName = getSafeFilename($_FILES['suite_image']['name']);
-    move_uploaded_file($_FILES['suite_image']['tmp_name'], $upload_dir . $safeName);
-
-    $img_path = '/image/' . $safeName;
-    $stmt = $conn->prepare("UPDATE rooms SET rooms_image = ? WHERE hotel_id = ? AND room_type = 'suite'");
-    $stmt->bind_param("si", $img_path, $hotel_id);
-    $stmt->execute();
-}
-
-echo "<script>alert('호텔 정보가 수정되었습니다.'); window.location.href = '../admin/admin.php?tab=hotels';</script>";
-exit;
 ?>

@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: kisia_hotel
       MYSQL_USER: kisia
       MYSQL_PASSWORD: kisia
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
     volumes:
@@ -18,17 +19,17 @@ services:
       --default-authentication-plugin=mysql_native_password
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
-    restart: always
+      --default-time-zone='+09:00'
 
   web:
     build: .
     container_name: kisia_web
     ports:
-      - "8080:80"    # HTTP 포트
-      - "8443:443"   # HTTPS 포트
+      - "8080:80"     # HTTP
+      - "8443:443"    # HTTPS
     volumes:
       - ./src:/var/www/html
-      - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf  # HTTP 리디렉션 설정
+      - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
     depends_on:
       - mysql
     restart: always
